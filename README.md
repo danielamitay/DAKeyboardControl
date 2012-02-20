@@ -49,7 +49,7 @@ A delegate property is included in the UIView class to support.
 ## Notes
 
 ### Untested in App Store
-All code is iOS 4.3+ safe and well documented, but has not been put into a production app (yet).
+All code is iOS 5.0+ safe and well documented, but has not been put into a production app (yet).
 
 ### Tiny Glitch
 The first time that the keyboard appears, there is a little hiccup due to loading lag (of the UIKeyboard). Will see what can be done.
