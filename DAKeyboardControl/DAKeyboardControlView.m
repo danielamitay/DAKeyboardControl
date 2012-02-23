@@ -122,6 +122,7 @@
 {
     activeKeyboard.hidden = NO;
     activeKeyboard.userInteractionEnabled = YES;
+    activeKeyboard = nil;
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
