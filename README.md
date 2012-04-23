@@ -48,8 +48,8 @@ A delegate property is included in the UIView class to support.
 
 ## Notes
 
-### Untested in App Store
-All code is iOS 5.0+ safe and well documented, but has not been put into a production app (yet).
+### Tested in App Store!
+All code is iOS 5.0+ safe and well documented, and has made it through the App Store review process (for what it is worth).
 
 ### Tiny Glitch
 The first time that the keyboard appears, there is a little hiccup due to loading lag (of the UIKeyboard). Will see what can be done.
