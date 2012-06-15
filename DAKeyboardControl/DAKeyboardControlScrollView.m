@@ -50,7 +50,9 @@
                                                    object:nil];
         
         // Register for gesture recognizer calls
-        [self.panGestureRecognizer addTarget:self action:@selector(panGestureDidChange)];
+        if ([self respondsToSelector:@selector(panGestureRecognizer)]) {
+            [self.panGestureRecognizer addTarget:self action:@selector(panGestureDidChange)];
+        }
     }
     else
     {
@@ -78,7 +80,9 @@
                                                       object:nil];
         
         // Unregister for gesture recognizer calls
-        [self.panGestureRecognizer removeTarget:self action:@selector(panGestureDidChange)];
+        if ([self respondsToSelector:@selector(panGestureRecognizer)]) {
+            [self.panGestureRecognizer removeTarget:self action:@selector(panGestureDidChange)];
+        }
     }
 }
 
