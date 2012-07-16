@@ -13,7 +13,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "634F809714DF851E00046115"
+               BlueprintIdentifier = "6366DFC215B3E76100FE53DE"
                BuildableName = "DAKeyboardControlExample.app"
                BlueprintName = "DAKeyboardControlExample"
                ReferencedContainer = "container:DAKeyboardControlExample.xcodeproj">
@@ -22,8 +22,8 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
@@ -31,7 +31,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "634F809714DF851E00046115"
+            BlueprintIdentifier = "6366DFC215B3E76100FE53DE"
             BuildableName = "DAKeyboardControlExample.app"
             BlueprintName = "DAKeyboardControlExample"
             ReferencedContainer = "container:DAKeyboardControlExample.xcodeproj">
@@ -39,17 +39,18 @@
       </MacroExpansion>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
+      ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "634F809714DF851E00046115"
+            BlueprintIdentifier = "6366DFC215B3E76100FE53DE"
             BuildableName = "DAKeyboardControlExample.app"
             BlueprintName = "DAKeyboardControlExample"
             ReferencedContainer = "container:DAKeyboardControlExample.xcodeproj">
@@ -67,7 +68,7 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "634F809714DF851E00046115"
+            BlueprintIdentifier = "6366DFC215B3E76100FE53DE"
             BuildableName = "DAKeyboardControlExample.app"
             BlueprintName = "DAKeyboardControlExample"
             ReferencedContainer = "container:DAKeyboardControlExample.xcodeproj">

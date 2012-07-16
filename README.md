@@ -1,58 +1,59 @@
-## DAKeyboardControl
+# DAKeyboardControl
 
-DAKeyboardControl is a collection of UIView subclasses that allow the user to drag the UIKeyboard down from a view. DAKeyboardControl is unique because it allows the "drag down" functionality even from a UITableView. As a result, with DAKeyboardControl, you are able to mimic the chat bar functionality of the iMessage app.
+DAKeyboardControl allows you to easily add keyboard awareness and scrolling dismissal (a receding keyboard ala iMessages app) to any UIView, UIScrollView or UITableView with only 1 line of code. DAKeyboardControl automatically extends UIView and provides a block callback with the keyboard's current origin.
 
-Gets along well with other subclasses and categories. No dirty, breakable hacks.
+DAKeyboardControl now fully supports orientation changes, iPhone & iPad, and is even aware of keyboard undocking or splitting on the iPad.
 
-View the included example project for a demonstration.
+No hacks, fully App Store safe.
 
 ## Installation
 
-To use DAKeyboardControl:
-
-1 - Copy over the `DAKeyboardControl` folder to your project folder.
-2 - Subclass.
+- Copy over the `DAKeyboardControl` folder to your project folder.
+- `#import "DAKeyboardControl.h"`.
 Optional - Customize.
 
 ## Usage
-Wherever you want to use DAKeyboardControl, import the appropriate header file and subclass as follows:
 
-For UIView:
-```
-' #import "DAKeyboardControlView.h" '
-```
+Example project included (DAKeyboardControlExample)
 
-For UITableView:
-```
-' #import "DAKeyboardControlTableView.h" '
-```
+### Adding pan-to-dismiss (functionality introduced in iMessages)
 
-For UIScrollView:
-```
-' #import "DAKeyboardControlScrollView.h" '
+```objective-c
+[self.view addKeyboardPanningWithActionHandler:^(CGPoint keyboardOriginInView) {
+        // Move interface objects accordingly
+		// Animation block is handled for you
+    }];
 ```
 
-Subclass either via code or Interface Builder.
+### Adding keyboard awareness (appearance and disappearance only)
 
-## Delegate Method
-Each of the DAKeyboardControl classes supports the following optional delegate method:
-
-```
-- (void)keyboardFrameWillChange:(CGRect)newFrame
-						   from:(CGRect)oldFrame
-						   over:(CGFloat)seconds;
+```objective-c
+[self.view addKeyboardNonpanningWithActionHander:^(CGPoint keyboardOriginInView) {
+        // Move interface objects accordingly
+		// Animation block is handled for you
+    }];
 ```
 
-This gives you the opportunity to move views up or down as the keyboard appears/disappears/moves. View the "Offset TableView Example" implementation.
-A delegate property is included in the UIView class to support.
+### Supporting an above-keyboard input view
+
+The `keyboardTriggerOffset` property allows you to choose at what point the user's finger "engages" the keyboard.
+
+```objective-c
+self.view.keyboardTriggerOffset = // Input view frame height
+
+[self.view addKeyboardPanningWithActionHandler:^(CGPoint keyboardOriginInView) {
+        // Move input view accordingly
+		// Animation block is handled for you
+    }];
+```
 
 ## Notes
 
 ### Tested in App Store!
-All code is iOS 5.0+ safe and well documented, and has made it through the App Store review process (for what it is worth).
+All code is iOS 4.0+ safe and well documented, and is already in production apps on the App Store.
 
-### Tiny Glitch
-The first time that the keyboard appears, there is a little hiccup due to loading lag (of the UIKeyboard). Will see what can be done.
+### Keyboard Delay On First Appearance
+Standard issue. Use Brandon William's [KeyboardCache category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
 
 ### Automatic Reference Counting (ARC) support
 DAKeyboardControl was made with ARC enabled by default.
