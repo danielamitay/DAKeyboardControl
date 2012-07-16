@@ -10,7 +10,6 @@ No hacks, fully App Store safe.
 
 - Copy over the `DAKeyboardControl` folder to your project folder.
 - `#import "DAKeyboardControl.h"`.
-Optional - Customize.
 
 ## Usage
 
@@ -39,7 +38,7 @@ Example project included (DAKeyboardControlExample)
 The `keyboardTriggerOffset` property allows you to choose at what point the user's finger "engages" the keyboard.
 
 ```objective-c
-self.view.keyboardTriggerOffset = // Input view frame height
+self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
 
 [self.view addKeyboardPanningWithActionHandler:^(CGPoint keyboardOriginInView) {
         // Move input view accordingly
@@ -53,7 +52,7 @@ self.view.keyboardTriggerOffset = // Input view frame height
 All code is iOS 4.0+ safe and well documented, and is already in production apps on the App Store.
 
 ### Keyboard Delay On First Appearance
-Standard issue. Use Brandon William's [KeyboardCache category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
+Standard issue. Use Brandon William's [UIResponder category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
 
 ### Automatic Reference Counting (ARC) support
 DAKeyboardControl was made with ARC enabled by default.
