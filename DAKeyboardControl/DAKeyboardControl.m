@@ -270,7 +270,7 @@ static char UIViewKeyboardPanRecognizer;
 
 - (void)panGestureDidChange:(UIPanGestureRecognizer *)gesture
 {
-    if(!self.keyboardActiveView || !self.keyboardActiveInput)
+    if(!self.keyboardActiveView || !self.keyboardActiveInput || self.keyboardActiveView.hidden)
     {
         return;
     }
