@@ -160,6 +160,7 @@ static char UIViewKeyboardPanRecognizer;
     {
         UITextField *textField = (UITextField *)self.keyboardActiveInput;
         UIView *nullView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+        UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
         nullView.backgroundColor = [UIColor clearColor];
         textField.inputAccessoryView = nullView;
         self.keyboardActiveInput = (UIResponder *)textField;
