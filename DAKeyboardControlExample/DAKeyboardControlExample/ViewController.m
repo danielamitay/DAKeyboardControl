@@ -67,6 +67,10 @@
         CGRect toolBarFrame = toolBar.frame;
         toolBarFrame.origin.y = keyboardOriginInView.y - toolBarFrame.size.height;
         toolBar.frame = toolBarFrame;
+        
+        CGRect tableViewFrame = tableView.frame;
+        tableViewFrame.size.height = toolBarFrame.origin.y;
+        tableView.frame = tableViewFrame;
     }];
 }
 
