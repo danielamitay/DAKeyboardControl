@@ -159,7 +159,6 @@ static char UIViewKeyboardPanRecognizer;
     if (!self.keyboardActiveInput.inputAccessoryView)
     {
         UITextField *textField = (UITextField *)self.keyboardActiveInput;
-        UIView *nullView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
         UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
         nullView.backgroundColor = [UIColor clearColor];
         textField.inputAccessoryView = nullView;
