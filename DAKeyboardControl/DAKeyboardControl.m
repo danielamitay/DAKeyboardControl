@@ -275,6 +275,12 @@ static char UIViewKeyboardPanRecognizer;
     return YES;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    // Don't allow panning if inside the active input
+    return ![touch.view isFirstResponder];
+}
+
 - (void)panGestureDidChange:(UIPanGestureRecognizer *)gesture
 {
     if(!self.keyboardActiveView || !self.keyboardActiveInput || self.keyboardActiveView.hidden)
