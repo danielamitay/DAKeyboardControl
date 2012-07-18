@@ -6,6 +6,10 @@ DAKeyboardControl now fully supports orientation changes, iPhone & iPad, and is 
 
 No hacks, fully App Store safe.
 
+![Screenshot](https://github.com/danielamitay/DAKeyboardControl/raw/master/screenshot.png)
+
+[Video demonstration on YouTube](http://www.youtube.com/watch?v=J6GLro0cyDU)
+
 ## Installation
 
 - Copy over the `DAKeyboardControl` folder to your project folder.
