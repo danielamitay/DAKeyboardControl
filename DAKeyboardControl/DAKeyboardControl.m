@@ -277,8 +277,8 @@ static char UIViewKeyboardPanRecognizer;
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    // Don't allow panning if inside the active input
-    return ![touch.view isFirstResponder];
+    // Don't allow panning if inside the active input (unless SELF is a UITextView and the receiving view)
+    return (![touch.view isFirstResponder] || ([self isKindOfClass:[UITextView class]] && [self isEqual:touch.view]));
 }
 
 - (void)panGestureDidChange:(UIPanGestureRecognizer *)gesture
