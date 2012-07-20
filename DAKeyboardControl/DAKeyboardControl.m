@@ -93,17 +93,21 @@ static char UIViewKeyboardPanRecognizer;
     }
 }
 
-- (CGPoint)keyboardOriginInView
+- (CGRect)keyboardFrameInView
 {
     if (self.keyboardActiveView)
     {
-        CGPoint keyboardWindowOrigin = self.keyboardActiveView.frame.origin;
-        return [self convertPoint:keyboardWindowOrigin fromView:self.keyboardActiveView.window];
+        CGRect keyboardFrameInView = [self convertRect:self.keyboardActiveView.frame
+                                              fromView:self.keyboardActiveView.window];
+        return keyboardFrameInView;
     }
     else
     {
-        CGPoint keyboardWindowOrigin = CGPointMake(0.0f, [[UIScreen mainScreen] bounds].size.height);
-        return [self convertPoint:keyboardWindowOrigin fromView:self.keyboardActiveView.window];
+        CGRect keyboardFrameInView = CGRectMake(0.0f,
+                                                [[UIScreen mainScreen] bounds].size.height,
+                                                0.0f,
+                                                0.0f);
+        return keyboardFrameInView;
     }
 }
 
@@ -188,7 +192,7 @@ static char UIViewKeyboardPanRecognizer;
                         options:keyboardTransitionAnimationCurve
                      animations:^{
                          if (self.keyboardDidMoveBlock)
-                             self.keyboardDidMoveBlock(keyboardEndFrameView.origin);
+                             self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
                      }];
@@ -226,7 +230,7 @@ static char UIViewKeyboardPanRecognizer;
                         options:keyboardTransitionAnimationCurve
                      animations:^{
                          if (self.keyboardDidMoveBlock)
-                             self.keyboardDidMoveBlock(keyboardEndFrameView.origin);
+                             self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
                      }];
@@ -255,7 +259,7 @@ static char UIViewKeyboardPanRecognizer;
                         options:keyboardTransitionAnimationCurve
                      animations:^{
                          if (self.keyboardDidMoveBlock)
-                             self.keyboardDidMoveBlock(keyboardEndFrameView.origin);
+                             self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
                      }];
@@ -332,7 +336,7 @@ static char UIViewKeyboardPanRecognizer;
                                  animations:^{
                                      [self.keyboardActiveView setFrame:newKeyboardViewFrame];
                                      if (self.keyboardDidMoveBlock)
-                                         self.keyboardDidMoveBlock(newKeyboardViewFrameInView.origin);
+                                         self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
                                  }
                                  completion:^(BOOL finished){
                                  }];
@@ -355,7 +359,7 @@ static char UIViewKeyboardPanRecognizer;
                              animations:^{
                                  [self.keyboardActiveView setFrame:newKeyboardViewFrame];
                                  if (self.keyboardDidMoveBlock)
-                                     self.keyboardDidMoveBlock(newKeyboardViewFrameInView.origin);
+                                     self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
                              }
                              completion:^(BOOL finished){
                                  if (!within44Pixels)
@@ -383,7 +387,7 @@ static char UIViewKeyboardPanRecognizer;
                              animations:^{
                                  [self.keyboardActiveView setFrame:newKeyboardViewFrame];
                                  if (self.keyboardDidMoveBlock)
-                                     self.keyboardDidMoveBlock(newKeyboardViewFrameInView.origin);
+                                     self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
                              }
                              completion:^(BOOL finished){
                                  if (!within44Pixels)

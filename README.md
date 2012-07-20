@@ -22,7 +22,7 @@ Example project included (DAKeyboardControlExample)
 ### Adding pan-to-dismiss (functionality introduced in iMessages)
 
 ```objective-c
-[self.view addKeyboardPanningWithActionHandler:^(CGPoint keyboardOriginInView) {
+[self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView) {
         // Move interface objects accordingly
 		// Animation block is handled for you
     }];
@@ -31,7 +31,7 @@ Example project included (DAKeyboardControlExample)
 ### Adding keyboard awareness (appearance and disappearance only)
 
 ```objective-c
-[self.view addKeyboardNonpanningWithActionHander:^(CGPoint keyboardOriginInView) {
+[self.view addKeyboardNonpanningWithActionHander:^(CGRect keyboardFrameInView) {
         // Move interface objects accordingly
 		// Animation block is handled for you
     }];
@@ -44,7 +44,7 @@ The `keyboardTriggerOffset` property allows you to choose at what point the user
 ```objective-c
 self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
 
-[self.view addKeyboardPanningWithActionHandler:^(CGPoint keyboardOriginInView) {
+[self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView) {
         // Move input view accordingly
 		// Animation block is handled for you
     }];

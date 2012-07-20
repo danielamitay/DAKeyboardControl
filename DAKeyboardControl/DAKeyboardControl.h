@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^DAKeyboardDidMoveBlock)(CGPoint keyboardOriginInView);
+typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
 
 @interface UIView (DAKeyboardControl)
 
@@ -19,6 +19,6 @@ typedef void (^DAKeyboardDidMoveBlock)(CGPoint keyboardOriginInView);
 
 - (void)removeKeyboardControl;
 
-- (CGPoint)keyboardOriginInView;
+- (CGRect)keyboardFrameInView;
 
 @end
