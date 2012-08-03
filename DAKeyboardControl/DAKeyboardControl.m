@@ -55,30 +55,30 @@ static char UIViewKeyboardPanRecognizer;
     
     // Register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
+                                             selector:@selector(inputKeyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidShow:)
+                                             selector:@selector(inputKeyboardDidShow:)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
     
     // For the sake of 4.X compatibility
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillChangeFrame:)
+                                             selector:@selector(inputKeyboardWillChangeFrame:)
                                                  name:@"UIKeyboardWillChangeFrameNotification"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidChangeFrame:)
+                                             selector:@selector(inputKeyboardDidChangeFrame:)
                                                  name:@"UIKeyboardDidChangeFrameNotification"
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
+                                             selector:@selector(inputKeyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidHide:)
+                                             selector:@selector(inputKeyboardDidHide:)
                                                  name:UIKeyboardDidHideNotification
                                                object:nil];
     
@@ -172,7 +172,7 @@ static char UIViewKeyboardPanRecognizer;
 
 #pragma mark - Keyboard Notifications
 
-- (void)keyboardWillShow:(NSNotification *)notification
+- (void)inputKeyboardWillShow:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow;
     [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardEndFrameWindow];
@@ -198,7 +198,7 @@ static char UIViewKeyboardPanRecognizer;
                      }];
 }
 
-- (void)keyboardDidShow:(NSNotification *)notification
+- (void)inputKeyboardDidShow:(NSNotification *)notification
 {
     // Grab the keyboard view
     self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
@@ -212,7 +212,7 @@ static char UIViewKeyboardPanRecognizer;
     }
 }
 
-- (void)keyboardWillChangeFrame:(NSNotification *)notification
+- (void)inputKeyboardWillChangeFrame:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow;
     [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardEndFrameWindow];
@@ -236,12 +236,12 @@ static char UIViewKeyboardPanRecognizer;
                      }];
 }
 
-- (void)keyboardDidChangeFrame:(NSNotification *)notification
+- (void)inputKeyboardDidChangeFrame:(NSNotification *)notification
 {
     // Nothing to see here
 }
 
-- (void)keyboardWillHide:(NSNotification *)notification
+- (void)inputKeyboardWillHide:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow;
     [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardEndFrameWindow];
@@ -265,7 +265,7 @@ static char UIViewKeyboardPanRecognizer;
                      }];
 }
 
-- (void)keyboardDidHide:(NSNotification *)notification
+- (void)inputKeyboardDidHide:(NSNotification *)notification
 {
     self.keyboardActiveView.hidden = NO;
     self.keyboardActiveView.userInteractionEnabled = YES;
