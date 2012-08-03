@@ -55,6 +55,9 @@ self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
 ### Tested in App Store!
 All code is iOS 4.0+ safe and well documented, and is already in production apps on the App Store.
 
+### Using with a UITextView
+Make sure to call `addKeyboardPanningWithActionHandler:` on the UITextView itself if you wish for it to allow panning inside itself.
+
 ### Keyboard Delay On First Appearance
 Standard issue. Use Brandon William's [UIResponder category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
 
