@@ -13,7 +13,7 @@ No hacks, fully App Store safe.
 ## Installation
 
 - Copy over the `DAKeyboardControl` folder to your project folder.
-- `#import "DAKeyboardControl.h"`.
+- `#import "DAKeyboardControl.h"`
 
 ## Usage
 
