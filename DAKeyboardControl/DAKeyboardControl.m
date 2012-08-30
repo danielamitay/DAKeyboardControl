@@ -34,7 +34,7 @@ static char UIViewKeyboardPanRecognizer;
     [self addKeyboardControl:YES actionHandler:actionHandler];
 }
 
-- (void)addKeyboardNonpanningWithActionHander:(DAKeyboardDidMoveBlock)actionHandler
+- (void)addKeyboardNonpanningWithActionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
     [self addKeyboardControl:NO actionHandler:actionHandler];
 }
