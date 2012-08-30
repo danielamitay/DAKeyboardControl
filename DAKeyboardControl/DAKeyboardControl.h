@@ -15,7 +15,7 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
 @property (nonatomic) CGFloat keyboardTriggerOffset;
 
 - (void)addKeyboardPanningWithActionHandler:(DAKeyboardDidMoveBlock)didMoveBlock;
-- (void)addKeyboardNonpanningWithActionHander:(DAKeyboardDidMoveBlock)didMoveBlock;
+- (void)addKeyboardNonpanningWithActionHandler:(DAKeyboardDidMoveBlock)didMoveBlock;
 
 - (void)removeKeyboardControl;
 
