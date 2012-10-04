@@ -154,6 +154,13 @@ static char UIViewKeyboardPanRecognizer;
     self.keyboardPanRecognizer = nil;
 }
 
+- (void)hideKeyboard
+{
+    self.keyboardActiveView.hidden = YES;
+    self.keyboardActiveView.userInteractionEnabled = NO;
+    [self.keyboardActiveInput resignFirstResponder];
+}
+
 #pragma mark - Input Notifications
 
 - (void)responderDidBecomeActive:(NSNotification *)notification
@@ -364,9 +371,7 @@ static char UIViewKeyboardPanRecognizer;
                              completion:^(BOOL finished){
                                  if (!within44Pixels)
                                  {
-                                     self.keyboardActiveView.hidden = YES;
-                                     self.keyboardActiveView.userInteractionEnabled = NO;
-                                     [self.keyboardActiveInput resignFirstResponder];
+                                     [self hideKeyboard];
                                  }
                              }];
         }
@@ -392,9 +397,7 @@ static char UIViewKeyboardPanRecognizer;
                              completion:^(BOOL finished){
                                  if (!within44Pixels)
                                  {
-                                     self.keyboardActiveView.hidden = YES;
-                                     self.keyboardActiveView.userInteractionEnabled = NO;
-                                     [self.keyboardActiveInput resignFirstResponder];
+                                     [self hideKeyboard];
                                  }
                              }];
         }
