@@ -21,4 +21,6 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
 
 - (CGRect)keyboardFrameInView;
 
+- (void)hideKeyboard;
+
 @end
