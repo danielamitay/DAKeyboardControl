@@ -15,6 +15,7 @@
 		6366DFD815B3E76100FE53DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6366DFD715B3E76100FE53DE /* AppDelegate.m */; };
 		6366DFDB15B3E76100FE53DE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6366DFDA15B3E76100FE53DE /* ViewController.m */; };
 		63DD74B915B424B700E33D01 /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 63DD74B815B424B700E33D01 /* DAKeyboardControl.m */; };
+		63ECD0631628CC5A004D8D10 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63ECD0621628CC5A004D8D10 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		6366DFDA15B3E76100FE53DE /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		63DD74B715B424B700E33D01 /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAKeyboardControl.h; sourceTree = "<group>"; };
 		63DD74B815B424B700E33D01 /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAKeyboardControl.m; sourceTree = "<group>"; };
+		63ECD0621628CC5A004D8D10 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 		6366DFCE15B3E76100FE53DE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				63ECD0621628CC5A004D8D10 /* Default-568h@2x.png */,
 				6366DFCF15B3E76100FE53DE /* DAKeyboardControlExample-Info.plist */,
 				6366DFD015B3E76100FE53DE /* InfoPlist.strings */,
 				6366DFD315B3E76100FE53DE /* main.m */,
@@ -161,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6366DFD215B3E76100FE53DE /* InfoPlist.strings in Resources */,
+				63ECD0631628CC5A004D8D10 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
