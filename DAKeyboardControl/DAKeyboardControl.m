@@ -283,13 +283,27 @@ static char UIViewKeyboardPanRecognizer;
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    return YES;
+    if (gestureRecognizer == self.keyboardPanRecognizer || otherGestureRecognizer == self.keyboardPanRecognizer)
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    // Don't allow panning if inside the active input (unless SELF is a UITextView and the receiving view)
-    return (![touch.view isFirstResponder] || ([self isKindOfClass:[UITextView class]] && [self isEqual:touch.view]));
+    if (gestureRecognizer == self.keyboardPanRecognizer)
+    {
+        // Don't allow panning if inside the active input (unless SELF is a UITextView and the receiving view)
+        return (![touch.view isFirstResponder] || ([self isKindOfClass:[UITextView class]] && [self isEqual:touch.view]));
+    }
+    else
+    {
+        return YES;
+    }
 }
 
 - (void)panGestureDidChange:(UIPanGestureRecognizer *)gesture
