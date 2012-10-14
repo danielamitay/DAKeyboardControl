@@ -50,6 +50,12 @@ self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
     }];
 ```
 
+### Dismissing the keyboard (convenience method)
+
+```objective-c
+[self.view hideKeyboard];
+```
+
 ## Notes
 
 ### Tested in App Store!
@@ -59,19 +65,18 @@ All code is iOS 4.0+ safe and well documented, and is already in production apps
 Make sure to call `addKeyboardPanningWithActionHandler:` on the UITextView itself if you wish for it to allow panning inside itself.
 
 ### Keyboard Delay On First Appearance
-Standard issue. Use Brandon William's [UIResponder category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
+Standard iOS issue. Use Brandon William's [UIResponder category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
 
 ### Automatic Reference Counting (ARC) support
 DAKeyboardControl was made with ARC enabled by default.
 
 ## Contact
 
-- [Personal website](http://www.amitay.us)
+- [Personal website](http://danielamitay.com)
 - [GitHub](http://github.com/danielamitay)
 - [Twitter](http://twitter.com/danielamitay)
 - [LinkedIn](http://www.linkedin.com/in/danielamitay)
-- [Hacker News](http://news.ycombinator.com/user?id=danielamitay)
-- [Email](daniel@amitay.us)
+- [Email](hello@danielamitay.com)
 
 If you use/enjoy DAKeyboardControl, let me know!
 
@@ -79,7 +84,7 @@ If you use/enjoy DAKeyboardControl, let me know!
 
 ### MIT License
 
-Copyright (c) 2012 Daniel Amitay (http://www.amitay.us)
+Copyright (c) 2012 Daniel Amitay (http://danielamitay.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
