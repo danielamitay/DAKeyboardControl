@@ -174,6 +174,8 @@ static char UIViewKeyboardPanRecognizer;
         nullView.backgroundColor = [UIColor clearColor];
         textField.inputAccessoryView = nullView;
         self.keyboardActiveInput = (UIResponder *)textField;
+        // Force the keyboard active view reset
+        [self inputKeyboardDidShow:nil];
     }
 }
 
@@ -214,8 +216,8 @@ static char UIViewKeyboardPanRecognizer;
     // If the active keyboard view could not be found (UITextViews...), try again
     if (!self.keyboardActiveView)
     {
-        [self.keyboardActiveInput resignFirstResponder];
-        [self.keyboardActiveInput becomeFirstResponder];
+        // Find the first responder on subviews and look re-assign first responder to it
+        [self reAssignFirstResponder];
     }
 }
 
@@ -310,6 +312,7 @@ static char UIViewKeyboardPanRecognizer;
 {
     if(!self.keyboardActiveView || !self.keyboardActiveInput || self.keyboardActiveView.hidden)
     {
+        [self reAssignFirstResponder];
         return;
     }
     else
@@ -419,6 +422,38 @@ static char UIViewKeyboardPanRecognizer;
         default:
             break;
     }
+}
+
+#pragma mark - Internal Methods
+
+- (void)reAssignFirstResponder
+{
+    // Find first responder
+    UIView *inputView = [self recursiveFindFirstResponder:self];
+    if (inputView != nil)
+    {
+        // Re assign the focus
+        [inputView resignFirstResponder];
+        [inputView becomeFirstResponder];
+    }
+}
+
+- (UIView *)recursiveFindFirstResponder:(UIView *)view
+{
+    if ([view isFirstResponder])
+    {
+        return view;
+    }
+    UIView *found = nil;
+    for (UIView *v in view.subviews)
+    {
+        found = [self recursiveFindFirstResponder:v];
+        if (found)
+        {
+            break;
+        }
+    }
+    return found;
 }
 
 #pragma mark - Property Methods
