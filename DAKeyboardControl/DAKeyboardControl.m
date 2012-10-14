@@ -370,12 +370,18 @@ static char UIViewKeyboardPanRecognizer;
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
         {
+            CGFloat thresholdHeight = keyboardWindowHeight - keyboardViewHeight - self.keyboardTriggerOffset + 44.0f;
+            CGPoint velocity = [gesture velocityInView:self.keyboardActiveView];
+            BOOL shouldRecede;
+            
+            if (touchLocationInKeyboardWindow.y < thresholdHeight || velocity.y < 0)
+                shouldRecede = NO;
+            else
+                shouldRecede = YES;
+            
+            // If the keyboard has only been pushed down 44 pixels or has been panned upwards let it pop back up; otherwise, let it drop down
             CGRect newKeyboardViewFrame = self.keyboardActiveView.frame;
-            BOOL within44Pixels = (touchLocationInKeyboardWindow.y < keyboardWindowHeight - keyboardViewHeight - self.keyboardTriggerOffset + 44.0f);
-            
-            // If the keyboard has only been pushed down 44 pixels, let it pop back up; otherwise, let it drop down
-            newKeyboardViewFrame.origin.y = (within44Pixels ? keyboardWindowHeight - keyboardViewHeight : keyboardWindowHeight);
-            
+            newKeyboardViewFrame.origin.y = (!shouldRecede ? keyboardWindowHeight - keyboardViewHeight : keyboardWindowHeight);
             CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame fromView:self.keyboardActiveView.window];
             
             [UIView animateWithDuration:0.25f
@@ -387,7 +393,7 @@ static char UIViewKeyboardPanRecognizer;
                                      self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
                              }
                              completion:^(BOOL finished){
-                                 if (!within44Pixels)
+                                 if (shouldRecede)
                                  {
                                      [self hideKeyboard];
                                  }
