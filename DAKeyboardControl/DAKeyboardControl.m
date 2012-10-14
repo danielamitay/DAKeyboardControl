@@ -368,31 +368,6 @@ static char UIViewKeyboardPanRecognizer;
         }
             break;
         case UIGestureRecognizerStateEnded:
-        {
-            CGRect newKeyboardViewFrame = self.keyboardActiveView.frame;
-            BOOL within44Pixels = (touchLocationInKeyboardWindow.y < keyboardWindowHeight - keyboardViewHeight - self.keyboardTriggerOffset + 44.0f);
-            
-            // If the keyboard has only been pushed down 44 pixels, let it pop back up; otherwise, let it drop down
-            newKeyboardViewFrame.origin.y = (within44Pixels ? keyboardWindowHeight - keyboardViewHeight : keyboardWindowHeight);
-            
-            CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame fromView:self.keyboardActiveView.window];
-            
-            [UIView animateWithDuration:0.25f
-                                  delay:0.0f
-                                options:UIViewAnimationOptionCurveEaseOut
-                             animations:^{
-                                 [self.keyboardActiveView setFrame:newKeyboardViewFrame];
-                                 if (self.keyboardDidMoveBlock)
-                                     self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
-                             }
-                             completion:^(BOOL finished){
-                                 if (!within44Pixels)
-                                 {
-                                     [self hideKeyboard];
-                                 }
-                             }];
-        }
-            break;
         case UIGestureRecognizerStateCancelled:
         {
             CGRect newKeyboardViewFrame = self.keyboardActiveView.frame;
