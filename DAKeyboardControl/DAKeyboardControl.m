@@ -27,6 +27,25 @@ static char UIViewKeyboardPanRecognizer;
 @implementation UIView (DAKeyboardControl)
 @dynamic keyboardTriggerOffset;
 
++ (void)load
+{
+    // Swizzle the 'addSubview:' method to ensure that all input fields
+    // have a valid inputAccessoryView upon addition to the view heirarchy
+    SEL originalSelector = @selector(addSubview:);
+    SEL swizzledSelector = @selector(swizzled_addSubview:);
+    Method originalMethod = class_getInstanceMethod(self, originalSelector);
+    Method swizzledMethod = class_getInstanceMethod(self, swizzledSelector);
+    class_addMethod(self,
+					originalSelector,
+					class_getMethodImplementation(self, originalSelector),
+					method_getTypeEncoding(originalMethod));
+	class_addMethod(self,
+					swizzledSelector,
+					class_getMethodImplementation(self, swizzledSelector),
+					method_getTypeEncoding(swizzledMethod));
+    method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
 #pragma mark - Public Methods
 
 - (void)addKeyboardPanningWithActionHandler:(DAKeyboardDidMoveBlock)actionHandler
@@ -435,6 +454,21 @@ static char UIViewKeyboardPanRecognizer;
         }
     }
     return found;
+}
+
+- (void)swizzled_addSubview:(UIView *)subview
+{
+    if ([subview isKindOfClass:[UITextView class]] || [subview isKindOfClass:[UITextField class]])
+    {
+        if (!subview.inputAccessoryView)
+        {
+            UITextField *textField = (UITextField *)subview;
+            UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
+            nullView.backgroundColor = [UIColor clearColor];
+            textField.inputAccessoryView = nullView;
+        }
+    }
+    [self swizzled_addSubview:subview];
 }
 
 #pragma mark - Property Methods
