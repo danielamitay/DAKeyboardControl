@@ -189,9 +189,12 @@ static char UIViewKeyboardPanRecognizer;
     if (!self.keyboardActiveInput.inputAccessoryView)
     {
         UITextField *textField = (UITextField *)self.keyboardActiveInput;
-        UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
-        nullView.backgroundColor = [UIColor clearColor];
-        textField.inputAccessoryView = nullView;
+        if ([textField respondsToSelector:@selector(setInputAccessoryView:)])
+        {
+            UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
+            nullView.backgroundColor = [UIColor clearColor];
+            textField.inputAccessoryView = nullView;
+        }
         self.keyboardActiveInput = (UIResponder *)textField;
         // Force the keyboard active view reset
         [self inputKeyboardDidShow:nil];
@@ -463,9 +466,12 @@ static char UIViewKeyboardPanRecognizer;
         if (!subview.inputAccessoryView)
         {
             UITextField *textField = (UITextField *)subview;
-            UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
-            nullView.backgroundColor = [UIColor clearColor];
-            textField.inputAccessoryView = nullView;
+            if ([textField respondsToSelector:@selector(setInputAccessoryView:)])
+            {
+                UIView *nullView = [[UIView alloc] initWithFrame:CGRectZero];
+                nullView.backgroundColor = [UIColor clearColor];
+                textField.inputAccessoryView = nullView;
+            }
         }
     }
     [self swizzled_addSubview:subview];
