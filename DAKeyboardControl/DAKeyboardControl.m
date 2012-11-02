@@ -303,6 +303,22 @@ static char UIViewKeyboardPanRecognizer;
     self.keyboardActiveView = nil;
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if([keyPath isEqualToString:@"frame"] && object == self.keyboardActiveView)
+    {
+        CGRect keyboardEndFrameWindow = [[object valueForKeyPath:keyPath] CGRectValue];
+        CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.window];
+        if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden)
+        {
+            self.keyboardDidMoveBlock(keyboardEndFrameView);
+        }
+    }
+}
+
 #pragma mark - Touches Management
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -373,16 +389,18 @@ static char UIViewKeyboardPanRecognizer;
             
             // Only update if the frame has actually changed
             if (newKeyboardViewFrame.origin.y != self.keyboardActiveView.frame.origin.y)
-            {
-                CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame fromView:self.keyboardActiveView.window];
-                
+            {                
                 [UIView animateWithDuration:0.0f
                                       delay:0.0f
                                     options:UIViewAnimationOptionTransitionNone
                                  animations:^{
                                      [self.keyboardActiveView setFrame:newKeyboardViewFrame];
+                                     /* Unnecessary now, due to KVO on self.keyboardActiveView
+                                     CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame
+                                                                                  fromView:self.keyboardActiveView.window];
                                      if (self.keyboardDidMoveBlock)
                                          self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
+                                     */
                                  }
                                  completion:^(BOOL finished){
                                  }];
@@ -401,18 +419,22 @@ static char UIViewKeyboardPanRecognizer;
             else
                 shouldRecede = YES;
             
-            // If the keyboard has only been pushed down 44 pixels or has been panned upwards let it pop back up; otherwise, let it drop down
+            // If the keyboard has only been pushed down 44 pixels or has been
+            // panned upwards let it pop back up; otherwise, let it drop down
             CGRect newKeyboardViewFrame = self.keyboardActiveView.frame;
             newKeyboardViewFrame.origin.y = (!shouldRecede ? keyboardWindowHeight - keyboardViewHeight : keyboardWindowHeight);
-            CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame fromView:self.keyboardActiveView.window];
             
             [UIView animateWithDuration:0.25f
                                   delay:0.0f
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
                                  [self.keyboardActiveView setFrame:newKeyboardViewFrame];
+                                 /* Unnecessary now, due to KVO on self.keyboardActiveView
+                                 CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame
+                                                                              fromView:self.keyboardActiveView.window];
                                  if (self.keyboardDidMoveBlock)
                                      self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
+                                 */
                              }
                              completion:^(BOOL finished){
                                  if (shouldRecede)
@@ -537,6 +559,15 @@ static char UIViewKeyboardPanRecognizer;
 - (void)setKeyboardActiveView:(UIView *)keyboardActiveView
 {
     [self willChangeValueForKey:@"keyboardActiveView"];
+    [self.keyboardActiveView removeObserver:self
+                                 forKeyPath:@"frame"];
+    if (keyboardActiveView)
+    {
+        [keyboardActiveView addObserver:self
+                             forKeyPath:@"frame"
+                                options:0
+                                context:NULL];
+    }
     objc_setAssociatedObject(self,
                              &UIViewKeyboardActiveView,
                              keyboardActiveView,
