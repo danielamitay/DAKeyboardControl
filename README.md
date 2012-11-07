@@ -76,7 +76,7 @@ DAKeyboardControl was made with ARC enabled by default.
 - [GitHub](http://github.com/danielamitay)
 - [Twitter](http://twitter.com/danielamitay)
 - [LinkedIn](http://www.linkedin.com/in/danielamitay)
-- [Email](hello@danielamitay.com)
+- [Email](mailto:hello@danielamitay.com)
 
 If you use/enjoy DAKeyboardControl, let me know!
 
