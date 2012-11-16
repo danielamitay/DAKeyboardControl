@@ -9,6 +9,29 @@
 #import "DAKeyboardControl.h"
 #import <objc/runtime.h>
 
+
+static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCurve curve)
+{
+	switch (curve) {
+		case UIViewAnimationCurveEaseInOut:
+			return UIViewAnimationOptionCurveEaseInOut;
+			break;
+		case UIViewAnimationCurveEaseIn:
+			return UIViewAnimationOptionCurveEaseIn;
+			break;
+		case UIViewAnimationCurveEaseOut:
+			return UIViewAnimationOptionCurveEaseOut;
+			break;
+		case UIViewAnimationCurveLinear:
+			return UIViewAnimationOptionCurveLinear;
+			break;
+			
+		default:
+			return UIViewAnimationOptionCurveEaseInOut;
+			break;
+	}
+}
+
 static char UIViewKeyboardTriggerOffset;
 static char UIViewKeyboardDidMoveBlock;
 static char UIViewKeyboardActiveInput;
@@ -220,7 +243,7 @@ static char UIViewKeyboardPanRecognizer;
     
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
-                        options:keyboardTransitionAnimationCurve
+                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          if (self.keyboardDidMoveBlock)
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
@@ -258,7 +281,7 @@ static char UIViewKeyboardPanRecognizer;
     
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
-                        options:keyboardTransitionAnimationCurve
+                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          if (self.keyboardDidMoveBlock)
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
@@ -287,7 +310,7 @@ static char UIViewKeyboardPanRecognizer;
     
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
-                        options:keyboardTransitionAnimationCurve
+                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          if (self.keyboardDidMoveBlock)
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
@@ -392,7 +415,7 @@ static char UIViewKeyboardPanRecognizer;
             {                
                 [UIView animateWithDuration:0.0f
                                       delay:0.0f
-                                    options:UIViewAnimationOptionTransitionNone
+                                    options:UIViewAnimationOptionTransitionNone | UIViewAnimationOptionBeginFromCurrentState
                                  animations:^{
                                      [self.keyboardActiveView setFrame:newKeyboardViewFrame];
                                      /* Unnecessary now, due to KVO on self.keyboardActiveView
@@ -426,7 +449,7 @@ static char UIViewKeyboardPanRecognizer;
             
             [UIView animateWithDuration:0.25f
                                   delay:0.0f
-                                options:UIViewAnimationOptionCurveEaseOut
+                                options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                              animations:^{
                                  [self.keyboardActiveView setFrame:newKeyboardViewFrame];
                                  /* Unnecessary now, due to KVO on self.keyboardActiveView
