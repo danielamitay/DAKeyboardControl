@@ -460,6 +460,7 @@ static char UIViewKeyboardPanRecognizer;
                                  */
                              }
                              completion:^(BOOL finished){
+                                 [[self keyboardActiveView] setUserInteractionEnabled:!shouldRecede];
                                  if (shouldRecede)
                                  {
                                      [self hideKeyboard];
