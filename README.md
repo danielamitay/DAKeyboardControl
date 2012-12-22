@@ -31,7 +31,7 @@ Example project included (DAKeyboardControlExample)
 ### Adding keyboard awareness (appearance and disappearance only)
 
 ```objective-c
-[self.view addKeyboardNonpanningWithActionHander:^(CGRect keyboardFrameInView) {
+[self.view addKeyboardNonpanningWithActionHandler:^(CGRect keyboardFrameInView) {
         // Move interface objects accordingly
 		// Animation block is handled for you
     }];
