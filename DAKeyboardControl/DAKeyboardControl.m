@@ -34,6 +34,7 @@ static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCur
 
 static char UIViewKeyboardTriggerOffset;
 static char UIViewKeyboardDidMoveBlock;
+static char UIViewKeyboardDidCompleteBlock;
 static char UIViewKeyboardActiveInput;
 static char UIViewKeyboardActiveView;
 static char UIViewKeyboardPanRecognizer;
@@ -41,6 +42,7 @@ static char UIViewKeyboardPanRecognizer;
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
 @property (nonatomic) DAKeyboardDidMoveBlock keyboardDidMoveBlock;
+@property (nonatomic) DAKeyboardDidMoveBlock keyboardDidCompleteBlock;
 @property (nonatomic, assign) UIResponder *keyboardActiveInput;
 @property (nonatomic, assign) UIView *keyboardActiveView;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
@@ -83,7 +85,12 @@ static char UIViewKeyboardPanRecognizer;
 
 - (void)addKeyboardControl:(BOOL)panning actionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
-    self.keyboardDidMoveBlock = actionHandler;
+    if (panning)
+    {
+        self.keyboardDidMoveBlock = actionHandler;
+    }
+    
+    self.keyboardDidCompleteBlock = actionHandler;
     
     // Register for text input notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -191,6 +198,7 @@ static char UIViewKeyboardPanRecognizer;
     
     // Release a few properties
     self.keyboardDidMoveBlock = nil;
+    self.keyboardDidCompleteBlock = nil;
     self.keyboardActiveInput = nil;
     self.keyboardActiveView = nil;
     self.keyboardPanRecognizer = nil;
@@ -287,6 +295,8 @@ static char UIViewKeyboardPanRecognizer;
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
+                         if(self.keyboardDidCompleteBlock)
+                             self.keyboardDidCompleteBlock(keyboardEndFrameView);
                      }];
 }
 
@@ -316,6 +326,8 @@ static char UIViewKeyboardPanRecognizer;
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
+                         if(self.keyboardDidCompleteBlock)
+                             self.keyboardDidCompleteBlock(keyboardEndFrameView);
                      }];
 }
 
@@ -539,6 +551,22 @@ static char UIViewKeyboardPanRecognizer;
                              keyboardDidMoveBlock,
                              OBJC_ASSOCIATION_COPY);
     [self didChangeValueForKey:@"keyboardDidMoveBlock"];
+}
+
+- (DAKeyboardDidMoveBlock)keyboardDidCompleteBlock
+{
+    return objc_getAssociatedObject(self,
+                                    &UIViewKeyboardDidCompleteBlock);
+}
+
+- (void)setKeyboardDidCompleteBlock:(DAKeyboardDidMoveBlock)keyboardDidCompleteBlock
+{
+    [self willChangeValueForKey:@"keyboardDidCompleteBlock"];
+    objc_setAssociatedObject(self,
+                             &UIViewKeyboardDidCompleteBlock,
+                             keyboardDidCompleteBlock,
+                             OBJC_ASSOCIATION_COPY);
+    [self didChangeValueForKey:@"keyboardDidCompleteBlock"];
 }
 
 - (CGFloat)keyboardTriggerOffset
