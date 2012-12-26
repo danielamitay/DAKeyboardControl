@@ -140,6 +140,11 @@ static char UIViewKeyboardPanRecognizer;
         [self.keyboardPanRecognizer setDelegate:self];
         [self addGestureRecognizer:self.keyboardPanRecognizer];
     }
+    
+    [self addObserver:self
+           forKeyPath:@"keyboardActiveView.frame"
+              options:0
+              context:NULL];
 }
 
 - (CGRect)keyboardFrameInView
@@ -195,6 +200,7 @@ static char UIViewKeyboardPanRecognizer;
     
     // Unregister any gesture recognizer
     [self removeGestureRecognizer:self.keyboardPanRecognizer];
+    [self removeObserver:self forKeyPath:@"keyboardActiveView.frame"];
     
     // Release a few properties
     self.keyboardDidMoveBlock = nil;
@@ -343,9 +349,9 @@ static char UIViewKeyboardPanRecognizer;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if([keyPath isEqualToString:@"frame"] && object == self.keyboardActiveView)
+    if([keyPath isEqualToString:@"keyboardActiveView.frame"] && self.keyboardActiveView)
     {
-        CGRect keyboardEndFrameWindow = [[object valueForKeyPath:keyPath] CGRectValue];
+        CGRect keyboardEndFrameWindow = self.keyboardActiveView.frame;
         CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.window];
         if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden)
         {
@@ -611,15 +617,6 @@ static char UIViewKeyboardPanRecognizer;
 - (void)setKeyboardActiveView:(UIView *)keyboardActiveView
 {
     [self willChangeValueForKey:@"keyboardActiveView"];
-    [self.keyboardActiveView removeObserver:self
-                                 forKeyPath:@"frame"];
-    if (keyboardActiveView)
-    {
-        [keyboardActiveView addObserver:self
-                             forKeyPath:@"frame"
-                                options:0
-                                context:NULL];
-    }
     objc_setAssociatedObject(self,
                              &UIViewKeyboardActiveView,
                              keyboardActiveView,
