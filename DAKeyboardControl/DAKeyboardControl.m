@@ -399,7 +399,9 @@ static char UIViewKeyboardPanRecognizer;
     {
         case UIGestureRecognizerStateBegan:
         {
-            
+            // For the duration of this gesture, do not recognize more touches than
+            // it started with
+            gesture.maximumNumberOfTouches = gesture.numberOfTouches;
         }
             break;
         case UIGestureRecognizerStateChanged:
@@ -466,6 +468,9 @@ static char UIViewKeyboardPanRecognizer;
                                      [self hideKeyboard];
                                  }
                              }];
+            
+            // Set the max number of touches back to the default
+            gesture.maximumNumberOfTouches = NSUIntegerMax;
         }
             break;
         default:
