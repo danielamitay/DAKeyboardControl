@@ -37,6 +37,7 @@ static char UIViewKeyboardDidMoveBlock;
 static char UIViewKeyboardActiveInput;
 static char UIViewKeyboardActiveView;
 static char UIViewKeyboardPanRecognizer;
+static char UIViewPreviousKeyboardRect;
 
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
@@ -44,6 +45,7 @@ static char UIViewKeyboardPanRecognizer;
 @property (nonatomic, assign) UIResponder *keyboardActiveInput;
 @property (nonatomic, assign) UIView *keyboardActiveView;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
+@property (nonatomic) CGRect previousKeyboardRect;
 
 @end
 
@@ -335,10 +337,13 @@ static char UIViewKeyboardPanRecognizer;
     {
         CGRect keyboardEndFrameWindow = [[object valueForKeyPath:keyPath] CGRectValue];
         CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.window];
+
+        if (CGRectEqualToRect(keyboardEndFrameView, self.previousKeyboardRect)) return;
+
         if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden)
-        {
             self.keyboardDidMoveBlock(keyboardEndFrameView);
-        }
+
+        self.previousKeyboardRect = keyboardEndFrameView;
     }
 }
 
@@ -529,6 +534,23 @@ static char UIViewKeyboardPanRecognizer;
 }
 
 #pragma mark - Property Methods
+
+-(CGRect)previousKeyboardRect {
+    id previousRectValue = objc_getAssociatedObject(self, &UIViewPreviousKeyboardRect);
+    if (previousRectValue)
+        return [previousRectValue CGRectValue];
+
+    return CGRectZero;
+}
+
+-(void)setPreviousKeyboardRect:(CGRect)previousKeyboardRect {
+    [self willChangeValueForKey:@"previousKeyboardRect"];
+    objc_setAssociatedObject(self,
+                             &UIViewPreviousKeyboardRect,
+                             [NSValue valueWithCGRect:previousKeyboardRect],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"previousKeyboardRect"];
+}
 
 - (DAKeyboardDidMoveBlock)keyboardDidMoveBlock
 {
