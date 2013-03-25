@@ -26,6 +26,8 @@ Example project included (DAKeyboardControlExample)
         // Move interface objects accordingly
 		// Animation block is handled for you
     }];
+	// Make sure to call [self.view removeKeyboardControl] before the view is released.
+	// (It's the balancing call)
 ```
 
 ### Adding keyboard awareness (appearance and disappearance only)
@@ -35,6 +37,8 @@ Example project included (DAKeyboardControlExample)
         // Move interface objects accordingly
 		// Animation block is handled for you
     }];
+	// Make sure to call [self.view removeKeyboardControl] before the view is released.
+	// (It's the balancing call)
 ```
 
 ### Supporting an above-keyboard input view
@@ -48,6 +52,8 @@ self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
         // Move input view accordingly
 		// Animation block is handled for you
     }];
+	// Make sure to call [self.view removeKeyboardControl] before the view is released.
+	// (It's the balancing call)
 ```
 
 ### Dismissing the keyboard (convenience method)
