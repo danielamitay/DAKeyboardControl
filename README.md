@@ -62,6 +62,12 @@ self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
 [self.view hideKeyboard];
 ```
 
+### Remove the NSNotification observer at the end of a VC's life (convenience method)
+
+```objective-c
+[self.view removeKeyboardControl];
+```
+
 ## Notes
 
 ### Tested in App Store!
