@@ -38,6 +38,7 @@ static char UIViewKeyboardActiveInput;
 static char UIViewKeyboardActiveView;
 static char UIViewKeyboardPanRecognizer;
 static char UIViewPreviousKeyboardRect;
+static BOOL isPanning;
 
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
@@ -85,6 +86,7 @@ static char UIViewPreviousKeyboardRect;
 
 - (void)addKeyboardControl:(BOOL)panning actionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
+    isPanning = panning;
     self.keyboardDidMoveBlock = actionHandler;
     
     // Register for text input notifications
@@ -125,16 +127,6 @@ static char UIViewPreviousKeyboardRect;
                                              selector:@selector(inputKeyboardDidHide:)
                                                  name:UIKeyboardDidHideNotification
                                                object:nil];
-    
-    if (panning)
-    {
-        // Register for gesture recognizer calls
-        self.keyboardPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                            action:@selector(panGestureDidChange:)];
-        [self.keyboardPanRecognizer setMinimumNumberOfTouches:1];
-        [self.keyboardPanRecognizer setDelegate:self];
-        [self addGestureRecognizer:self.keyboardPanRecognizer];
-    }
 }
 
 - (CGRect)keyboardFrameInView
@@ -251,6 +243,16 @@ static char UIViewPreviousKeyboardRect;
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
+                         if (isPanning)
+                         {
+                             // Register for gesture recognizer calls
+                             self.keyboardPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                                  action:@selector(panGestureDidChange:)];
+                             [self.keyboardPanRecognizer setMinimumNumberOfTouches:1];
+                             [self.keyboardPanRecognizer setDelegate:self];
+                             [self.keyboardPanRecognizer setCancelsTouchesInView:NO];
+                             [self addGestureRecognizer:self.keyboardPanRecognizer];
+                         }
                      }];
 }
 
@@ -318,6 +320,8 @@ static char UIViewPreviousKeyboardRect;
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
+                         // Remove gesture recognizer when keyboard is not showing
+                         [self removeGestureRecognizer:self.keyboardPanRecognizer];
                      }];
 }
 
