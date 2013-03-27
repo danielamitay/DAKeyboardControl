@@ -192,9 +192,12 @@ static BOOL isPanning;
 
 - (void)hideKeyboard
 {
-    self.keyboardActiveView.hidden = YES;
-    self.keyboardActiveView.userInteractionEnabled = NO;
-    [self.keyboardActiveInput resignFirstResponder];
+    if (self.keyboardActiveView)
+    {
+        self.keyboardActiveView.hidden = YES;
+        self.keyboardActiveView.userInteractionEnabled = NO;
+        [self.keyboardActiveInput resignFirstResponder];
+    }
 }
 
 #pragma mark - Input Notifications
