@@ -242,7 +242,7 @@ static BOOL isPanning;
                           delay:0.0f
                         options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         if (self.keyboardDidMoveBlock)
+                         if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
@@ -290,7 +290,7 @@ static BOOL isPanning;
                           delay:0.0f
                         options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         if (self.keyboardDidMoveBlock)
+                         if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
@@ -319,7 +319,7 @@ static BOOL isPanning;
                           delay:0.0f
                         options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         if (self.keyboardDidMoveBlock)
+                         if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
@@ -347,7 +347,7 @@ static BOOL isPanning;
 
         if (CGRectEqualToRect(keyboardEndFrameView, self.previousKeyboardRect)) return;
 
-        if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden)
+        if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden&& !CGRectIsNull(keyboardEndFrameView))
             self.keyboardDidMoveBlock(keyboardEndFrameView);
 
         self.previousKeyboardRect = keyboardEndFrameView;
