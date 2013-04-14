@@ -649,4 +649,16 @@ static BOOL isPanning;
     [self didChangeValueForKey:@"keyboardPanRecognizer"];
 }
 
+- (BOOL)keyboardWillRecede
+{
+    CGFloat keyboardViewHeight = self.keyboardActiveView.bounds.size.height;
+    CGFloat keyboardWindowHeight = self.keyboardActiveView.window.bounds.size.height;
+    CGPoint touchLocationInKeyboardWindow = [self.keyboardPanRecognizer locationInView:self.keyboardActiveView.window];
+    
+    CGFloat thresholdHeight = keyboardWindowHeight - keyboardViewHeight - self.keyboardTriggerOffset + 44.0f;
+    CGPoint velocity = [self.keyboardPanRecognizer velocityInView:self.keyboardActiveView];
+    
+    return touchLocationInKeyboardWindow.y >= thresholdHeight && velocity.y >= 0;
+}
+
 @end
