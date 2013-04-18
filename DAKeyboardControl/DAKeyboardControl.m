@@ -38,7 +38,7 @@ static char UIViewKeyboardActiveInput;
 static char UIViewKeyboardActiveView;
 static char UIViewKeyboardPanRecognizer;
 static char UIViewPreviousKeyboardRect;
-static BOOL isPanning;
+static char UIViewIsPanning;
 
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
@@ -47,6 +47,7 @@ static BOOL isPanning;
 @property (nonatomic, assign) UIView *keyboardActiveView;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
 @property (nonatomic) CGRect previousKeyboardRect;
+@property (nonatomic, getter = isPanning) BOOL panning;
 
 @end
 
@@ -86,7 +87,7 @@ static BOOL isPanning;
 
 - (void)addKeyboardControl:(BOOL)panning actionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
-    isPanning = panning;
+    self.panning = panning;
     self.keyboardDidMoveBlock = actionHandler;
     
     // Register for text input notifications
@@ -246,7 +247,7 @@ static BOOL isPanning;
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
-                         if (isPanning)
+                         if (self.panning)
                          {
                              // Register for gesture recognizer calls
                              self.keyboardPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -590,6 +591,23 @@ static BOOL isPanning;
                              [NSNumber numberWithFloat:keyboardTriggerOffset],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [self didChangeValueForKey:@"keyboardTriggerOffset"];
+}
+
+- (BOOL)isPanning
+{
+    NSNumber *keyboardTriggerOffsetNumber = objc_getAssociatedObject(self,
+                                                                     &UIViewIsPanning);
+    return [keyboardTriggerOffsetNumber boolValue];
+}
+
+- (void)setPanning:(BOOL)panning
+{
+    [self willChangeValueForKey:@"panning"];
+    objc_setAssociatedObject(self,
+                             &UIViewIsPanning,
+                             @(panning),
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"panning"];
 }
 
 - (UIResponder *)keyboardActiveInput
