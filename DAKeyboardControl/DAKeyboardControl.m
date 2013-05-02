@@ -247,7 +247,7 @@ static char UIViewIsPanning;
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
                      }
                      completion:^(BOOL finished){
-                         if (self.panning)
+                         if (self.panning && !self.keyboardPanRecognizer)
                          {
                              // Register for gesture recognizer calls
                              self.keyboardPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -326,6 +326,7 @@ static char UIViewIsPanning;
                      completion:^(BOOL finished){
                          // Remove gesture recognizer when keyboard is not showing
                          [self removeGestureRecognizer:self.keyboardPanRecognizer];
+                         self.keyboardPanRecognizer = nil;
                      }];
 }
 
