@@ -10,6 +10,10 @@ No hacks, fully App Store safe.
 
 [Video demonstration on YouTube](http://www.youtube.com/watch?v=J6GLro0cyDU)
 
+### iOS 7 (Update: June 10, 2013)
+
+Developers with advance access to the iOS7 SDK and Xcode 5 may have noticed a certain new addition to the SDK that relates to DAKeyboardControl. When the time comes, DAKeyboardControl will be updated to reflect this new addition.
+
 ## Installation
 
 - Copy over the `DAKeyboardControl` folder to your project folder.
