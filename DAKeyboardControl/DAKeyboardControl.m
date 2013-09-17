@@ -87,7 +87,15 @@ static char UIViewIsPanning;
 
 - (void)addKeyboardControl:(BOOL)panning actionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0)
+    if (panning && [self respondsToSelector:@selector(setKeyboardDismissMode:)]) {
+        [(UIScrollView *)self setKeyboardDismissMode:UIScrollViewKeyboardDismissModeInteractive];
+    } else {
+        self.panning = panning;
+    }
+#else
     self.panning = panning;
+#endif
     self.keyboardDidMoveBlock = actionHandler;
     
     // Register for text input notifications

@@ -14,6 +14,10 @@ No hacks, fully App Store safe.
 
 Developers with advance access to the iOS7 SDK and Xcode 5 may have noticed a certain new addition to the SDK that relates to DAKeyboardControl. When the time comes, DAKeyboardControl will be updated to reflect this new addition.
 
+### iOS 7 (Update: Sep 17, 2013)
+
+`DAKeyboardControl` will now selectively choose whether or not to use `UIScrollViewKeyboardDismissModeInteractive` if the current SDK and device version support it, otherwise it will fall back to the original functionality. It does not currently properly implement `keyboardTriggerOffset` (the system's handling of the keyboard panning does not currently allow for any flexibility aside from setting the `inputAccessoryView`);
+
 ## Installation
 
 - Copy over the `DAKeyboardControl` folder to your project folder.
