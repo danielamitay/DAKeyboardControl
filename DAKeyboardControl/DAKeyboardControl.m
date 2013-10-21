@@ -12,24 +12,7 @@
 
 static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCurve curve)
 {
-	switch (curve) {
-		case UIViewAnimationCurveEaseInOut:
-			return UIViewAnimationOptionCurveEaseInOut;
-			break;
-		case UIViewAnimationCurveEaseIn:
-			return UIViewAnimationOptionCurveEaseIn;
-			break;
-		case UIViewAnimationCurveEaseOut:
-			return UIViewAnimationOptionCurveEaseOut;
-			break;
-		case UIViewAnimationCurveLinear:
-			return UIViewAnimationOptionCurveLinear;
-			break;
-			
-		default:
-			return UIViewAnimationOptionCurveEaseInOut;
-			break;
-	}
+	return curve << 16;
 }
 
 static char UIViewKeyboardTriggerOffset;
