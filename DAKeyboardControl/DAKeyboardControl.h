@@ -18,6 +18,9 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
 
 @interface UIView (DAKeyboardControl)
 
+//default is NO
++ (void)setUseAutolayoutAnimationLogic:(BOOL)useAutolayoutAnimationLogic;
+
 /** The keyboardTriggerOffset property allows you to choose at what point the
  user's finger "engages" the keyboard.
  */
