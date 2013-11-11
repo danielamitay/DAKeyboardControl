@@ -460,7 +460,7 @@ static char UIViewIsPanning;
 - (void)reAssignFirstResponder
 {
     // Find first responder
-    UIView *inputView = [self recursiveFindFirstResponder:self];
+    UIView *inputView = [self findFirstResponder];
     if (inputView != nil) {
         // Re assign the focus
         [inputView resignFirstResponder];
@@ -468,19 +468,18 @@ static char UIViewIsPanning;
     }
 }
 
-- (UIView *)recursiveFindFirstResponder:(UIView *)view
+- (UIView *)findFirstResponder
 {
-    if ([view isFirstResponder]) {
-        return view;
+    if (self.isFirstResponder) {
+        return self;
     }
-    UIView *found = nil;
-    for (UIView *v in view.subviews) {
-        found = [self recursiveFindFirstResponder:v];
-        if (found) {
-            break;
+    for (UIView *subView in self.subviews) {
+        UIView *firstResponder = [subView findFirstResponder];
+        if (firstResponder != nil) {
+            return firstResponder;
         }
     }
-    return found;
+    return nil;
 }
 
 - (void)swizzled_addSubview:(UIView *)subview
