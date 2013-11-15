@@ -25,8 +25,8 @@ static char UIViewIsPanning;
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
 @property (nonatomic) DAKeyboardDidMoveBlock keyboardDidMoveBlock;
-@property (nonatomic, assign) UIResponder *keyboardActiveInput;
-@property (nonatomic, assign) UIView *keyboardActiveView;
+@property (nonatomic, weak) UIResponder *keyboardActiveInput;
+@property (nonatomic, weak) UIView *keyboardActiveView;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
 @property (nonatomic) CGRect previousKeyboardRect;
 @property (nonatomic, getter = isPanning) BOOL panning;
