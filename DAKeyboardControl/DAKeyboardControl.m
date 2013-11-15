@@ -9,10 +9,9 @@
 #import "DAKeyboardControl.h"
 #import <objc/runtime.h>
 
-
 static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCurve curve)
 {
-	return curve << 16;
+	return (curve << 16 | UIViewAnimationOptionBeginFromCurrentState);
 }
 
 static char UIViewKeyboardTriggerOffset;
@@ -94,14 +93,13 @@ static char UIViewIsPanning;
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
     
-    // For the sake of 4.X compatibility
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(inputKeyboardWillChangeFrame:)
-                                                 name:@"UIKeyboardWillChangeFrameNotification"
+                                                 name:UIKeyboardWillChangeFrameNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(inputKeyboardDidChangeFrame)
-                                                 name:@"UIKeyboardDidChangeFrameNotification"
+                                                 name:UIKeyboardDidChangeFrameNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -147,12 +145,11 @@ static char UIViewIsPanning;
                                                     name:UIKeyboardDidShowNotification
                                                   object:nil];
     
-    // For the sake of 4.X compatibility
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"UIKeyboardWillChangeFrameNotification"
+                                                    name:UIKeyboardWillChangeFrameNotification
                                                   object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"UIKeyboardDidChangeFrameNotification"
+                                                    name:UIKeyboardDidChangeFrameNotification
                                                   object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
@@ -216,7 +213,7 @@ static char UIViewIsPanning;
     
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
-                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
+                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve)
                      animations:^{
                          if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView)) {
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
@@ -258,7 +255,7 @@ static char UIViewIsPanning;
     
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
-                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
+                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve)
                      animations:^{
                          if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView)) {
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
@@ -282,7 +279,7 @@ static char UIViewIsPanning;
     
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
-                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
+                        options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve)
                      animations:^{
                          if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView)) {
                              self.keyboardDidMoveBlock(keyboardEndFrameView);
@@ -310,15 +307,12 @@ static char UIViewIsPanning;
     if([keyPath isEqualToString:@"frame"] && object == self.keyboardActiveView) {
         CGRect keyboardEndFrameWindow = [[object valueForKeyPath:keyPath] CGRectValue];
         CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.window];
-
         if (CGRectEqualToRect(keyboardEndFrameView, self.previousKeyboardRect)) {
             return;
         }
-
         if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden && !CGRectIsNull(keyboardEndFrameView)) {
             self.keyboardDidMoveBlock(keyboardEndFrameView);
         }
-
         self.previousKeyboardRect = keyboardEndFrameView;
     }
 }
