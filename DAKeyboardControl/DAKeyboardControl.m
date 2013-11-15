@@ -121,10 +121,10 @@ static char UIViewIsPanning;
                                               fromView:self.keyboardActiveView.window];
         return keyboardFrameInView;
     } else {
-        CGRect keyboardFrameInView = CGRectMake(0.0f,
-                                                [[UIScreen mainScreen] bounds].size.height,
-                                                0.0f,
-                                                0.0f);
+        UIWindow *window = ([self isKindOfClass:[UIWindow class]] ? (UIWindow *)self : self.window);
+        CGRect keyboardFrameInView = (CGRect) {
+            .origin.y = window.screen.bounds.size.height
+        };
         return keyboardFrameInView;
     }
 }
