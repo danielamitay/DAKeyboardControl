@@ -1,18 +1,14 @@
 # DAKeyboardControl
 
-DAKeyboardControl allows you to easily add keyboard awareness and scrolling dismissal (a receding keyboard ala iMessages app) to any UIView, UIScrollView or UITableView with only 1 line of code. DAKeyboardControl automatically extends UIView and provides a block callback with the keyboard's current origin.
+`DAKeyboardControl` allows you to easily add keyboard awareness and scrolling dismissal (a receding keyboard ala iMessages app) to any `UIView`,`UIScrollView` or `UITableView` with only 1 line of code. `DAKeyboardControl` automatically extends `UIView` and provides a block callback with the keyboard's current frame.
 
-DAKeyboardControl now fully supports orientation changes, iPhone & iPad, and is even aware of keyboard undocking or splitting on the iPad.
+`DAKeyboardControl` now fully supports orientation changes, iPhone & iPad, and is even aware of keyboard undocking or splitting on the iPad.
 
 No hacks, fully App Store safe.
 
 ![Screenshot](https://github.com/danielamitay/DAKeyboardControl/raw/master/screenshot.png)
 
 [Video demonstration on YouTube](http://www.youtube.com/watch?v=J6GLro0cyDU)
-
-### iOS 7 (Update: June 10, 2013)
-
-Developers with advance access to the iOS7 SDK and Xcode 5 may have noticed a certain new addition to the SDK that relates to DAKeyboardControl. When the time comes, DAKeyboardControl will be updated to reflect this new addition.
 
 ## Installation
 
@@ -75,26 +71,24 @@ self.view.keyboardTriggerOffset = 44.0f;	// Input view frame height
 ## Notes
 
 ### Tested in App Store!
-All code is iOS 4.0+ safe and well documented, and is already in production apps on the App Store.
+All code is iOS 5.0+ safe and well documented, and is already in production apps on the App Store.
 
-### Using with a UITextView
-Make sure to call `addKeyboardPanningWithActionHandler:` on the UITextView itself if you wish for it to allow panning inside itself.
+### Using with a `UITextView`
+Make sure to call `addKeyboardPanningWithActionHandler:` on the `UITextView` itself if you wish for it to allow panning inside itself.
 
 ### Keyboard Delay On First Appearance
 Standard iOS issue. Use Brandon William's [UIResponder category](https://github.com/mbrandonw/UIResponder-KeyboardCache) to cache the keyboard before first use.
 
 ### Automatic Reference Counting (ARC) support
-DAKeyboardControl was made with ARC enabled by default.
+`DAKeyboardControl` was made with ARC enabled by default.
 
 ## Contact
 
-- [Personal website](http://danielamitay.com)
-- [GitHub](http://github.com/danielamitay)
-- [Twitter](http://twitter.com/danielamitay)
-- [LinkedIn](http://www.linkedin.com/in/danielamitay)
-- [Email](mailto:hello@danielamitay.com)
+- [@danielamitay](http://twitter.com/danielamitay)
+- hello@danielamitay.com
+- http://www.danielamitay.com
 
-If you use/enjoy DAKeyboardControl, let me know!
+If you use/enjoy `DAKeyboardControl`, let me know!
 
 ## License
 
