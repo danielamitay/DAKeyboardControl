@@ -36,25 +36,6 @@ static char UIViewIsPanning;
 @implementation UIView (DAKeyboardControl)
 @dynamic keyboardTriggerOffset;
 
-+ (void)load
-{
-    // Swizzle the 'addSubview:' method to ensure that all input fields
-    // have a valid inputAccessoryView upon addition to the view heirarchy
-    SEL originalSelector = @selector(addSubview:);
-    SEL swizzledSelector = @selector(swizzled_addSubview:);
-    Method originalMethod = class_getInstanceMethod(self, originalSelector);
-    Method swizzledMethod = class_getInstanceMethod(self, swizzledSelector);
-    class_addMethod(self,
-					originalSelector,
-					class_getMethodImplementation(self, originalSelector),
-					method_getTypeEncoding(originalMethod));
-	class_addMethod(self,
-					swizzledSelector,
-					class_getMethodImplementation(self, swizzledSelector),
-					method_getTypeEncoding(swizzledMethod));
-    method_exchangeImplementations(originalMethod, swizzledMethod);
-}
-
 
 #pragma mark - Public Methods
 
@@ -461,7 +442,12 @@ static char UIViewIsPanning;
     return nil;
 }
 
-- (void)swizzled_addSubview:(UIView *)subview
+
+#pragma mark - UIView Method Overrides
+
+// Per Apple documentation:
+// The default implementation of this method does nothing.
+- (void)didAddSubview:(UIView *)subview
 {
     if ([subview isKindOfClass:[UITextView class]] || [subview isKindOfClass:[UITextField class]]) {
         if (!subview.inputAccessoryView) {
@@ -473,7 +459,6 @@ static char UIViewIsPanning;
             }
         }
     }
-    [self swizzled_addSubview:subview];
 }
 
 
