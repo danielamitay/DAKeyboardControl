@@ -54,6 +54,15 @@ static char UIViewIsPanning;
     self.panning = panning;
     self.keyboardDidMoveBlock = actionHandler;
     
+    // Check to see if the keyboard is already active, and setup accordingly
+    self.keyboardActiveInput = [self findFirstResponder];
+    if (self.keyboardActiveInput) {
+        self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+        if (self.keyboardActiveView && self.panning && !self.keyboardPanRecognizer) {
+            [self setupGestureRecognizer];
+        }
+    }
+
     // Register for text input notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(responderDidBecomeActive:)
@@ -202,13 +211,7 @@ static char UIViewIsPanning;
                      }
                      completion:^(__unused BOOL finished){
                          if (self.panning && !self.keyboardPanRecognizer) {
-                             // Register for gesture recognizer calls
-                             self.keyboardPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                                  action:@selector(panGestureDidChange:)];
-                             [self.keyboardPanRecognizer setMinimumNumberOfTouches:1];
-                             [self.keyboardPanRecognizer setDelegate:self];
-                             [self.keyboardPanRecognizer setCancelsTouchesInView:NO];
-                             [self addGestureRecognizer:self.keyboardPanRecognizer];
+                             [self setupGestureRecognizer];
                          }
                      }];
 }
@@ -440,6 +443,15 @@ static char UIViewIsPanning;
         }
     }
     return nil;
+}
+
+- (void)setupGestureRecognizer
+{
+    self.keyboardPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDidChange:)];
+    self.keyboardPanRecognizer.minimumNumberOfTouches = 1;
+    self.keyboardPanRecognizer.delegate = self;
+    self.keyboardPanRecognizer.cancelsTouchesInView = NO;
+    [self addGestureRecognizer:self.keyboardPanRecognizer];
 }
 
 
