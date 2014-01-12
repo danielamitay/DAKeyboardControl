@@ -23,10 +23,15 @@
 {
     [super viewDidLoad];
 
-    [UIView setUseAutolayoutAnimationLogic:YES];
-    
     __weak ViewController *wself = self;
-    [self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView) {
+    [self.view addKeyboardPanningWithFrameBasedActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
+        if (opening)
+        {
+            CGPoint contentOffset = wself.tableView.contentOffset;
+            contentOffset.y = MIN(contentOffset.y + keyboardFrameInView.size.height, wself.tableView.contentSize.height - (wself.tableView.frame.size.height - wself.tableView.contentInset.bottom));
+            wself.tableView.contentOffset = contentOffset;
+        }
+    } constraintBasedActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
         wself.bottomConstraint.constant = wself.view.frame.size.height - keyboardFrameInView.origin.y;
     }];
 }
@@ -40,13 +45,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return 40;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    cell.textLabel.text = [NSString stringWithFormat:@"Cell %d", indexPath.row + 1];
+    cell.textLabel.text = [NSString stringWithFormat:@"Cell %ld", indexPath.row + 1];
     return cell;
 }
 

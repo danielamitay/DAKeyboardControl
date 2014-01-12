@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
+typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView, BOOL opening, BOOL closing);
 
 /** DAKeyboardControl allows you to easily add keyboard awareness and scrolling
  dismissal (a receding keyboard ala iMessages app) to any UIView, UIScrollView
@@ -17,9 +17,6 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
  */
 
 @interface UIView (DAKeyboardControl)
-
-//default is NO
-+ (void)setUseAutolayoutAnimationLogic:(BOOL)useAutolayoutAnimationLogic;
 
 /** The keyboardTriggerOffset property allows you to choose at what point the
  user's finger "engages" the keyboard.
@@ -34,6 +31,8 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
  @see removeKeyboardControl
  */
 - (void)addKeyboardPanningWithActionHandler:(DAKeyboardDidMoveBlock)didMoveBlock;
+- (void)addKeyboardPanningWithFrameBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveFrameBasesBlock
+                         constraintBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveConstraintBasesBlock;
 
 /** Adding keyboard awareness (appearance and disappearance only)
  @param didMoveBlock called everytime the keyboard is moved so you can update
@@ -51,6 +50,7 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView);
 
 /** Returns the keyboard frame in the view */
 - (CGRect)keyboardFrameInView;
+- (BOOL)keyboardIsOpened;
 
 /** Convenience method to dismiss the keyboard */
 - (void)hideKeyboard;

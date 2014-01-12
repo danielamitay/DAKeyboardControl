@@ -16,7 +16,8 @@ static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCur
 }
 
 static char UIViewKeyboardTriggerOffset;
-static char UIViewKeyboardDidMoveBlock;
+static char UIViewKeyboardDidMoveFrameBasedBlock;
+static char UIViewKeyboardDidMoveConstraintBasedBlock;
 static char UIViewKeyboardActiveInput;
 static char UIViewKeyboardActiveView;
 static char UIViewKeyboardPanRecognizer;
@@ -25,13 +26,13 @@ static char UIViewIsPanning;
 
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
-@property (nonatomic) DAKeyboardDidMoveBlock keyboardDidMoveBlock;
+@property (nonatomic) DAKeyboardDidMoveBlock frameBasedKeyboardDidMoveBlock;
+@property (nonatomic) DAKeyboardDidMoveBlock constraintBasedKeyboardDidMoveBlock;
 @property (nonatomic, assign) UIResponder *keyboardActiveInput;
 @property (nonatomic, assign) UIView *keyboardActiveView;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
 @property (nonatomic) CGRect previousKeyboardRect;
 @property (nonatomic, getter = isPanning) BOOL panning;
-
 @end
 
 @implementation UIView (DAKeyboardControl)
@@ -58,23 +59,22 @@ static char UIViewIsPanning;
 
 #pragma mark - Public Methods
 
-static BOOL _useAutolayoutAnimationLogic = NO;
-+ (void)setUseAutolayoutAnimationLogic:(BOOL)useAutolayoutAnimationLogic
-{
-    _useAutolayoutAnimationLogic = useAutolayoutAnimationLogic;
-}
-
 - (void)addKeyboardPanningWithActionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
-    [self addKeyboardControl:YES actionHandler:actionHandler];
+    [self addKeyboardControl:YES frameBasedActionHandler:actionHandler constraintBasedActionHandler:0];
+}
+
+- (void)addKeyboardPanningWithFrameBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveFrameBasesBlock constraintBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveConstraintBasesBlock
+{
+    [self addKeyboardControl:YES frameBasedActionHandler:didMoveFrameBasesBlock constraintBasedActionHandler:didMoveConstraintBasesBlock];
 }
 
 - (void)addKeyboardNonpanningWithActionHandler:(DAKeyboardDidMoveBlock)actionHandler
 {
-    [self addKeyboardControl:NO actionHandler:actionHandler];
+    [self addKeyboardControl:NO frameBasedActionHandler:actionHandler constraintBasedActionHandler:0];
 }
 
-- (void)addKeyboardControl:(BOOL)panning actionHandler:(DAKeyboardDidMoveBlock)actionHandler
+- (void)addKeyboardControl:(BOOL)panning frameBasedActionHandler:(DAKeyboardDidMoveBlock)frameBasedActionHandler constraintBasedActionHandler:(DAKeyboardDidMoveBlock)constraintBasedActionHandler
 {
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0)
     if (panning && [self respondsToSelector:@selector(setKeyboardDismissMode:)]) {
@@ -85,7 +85,8 @@ static BOOL _useAutolayoutAnimationLogic = NO;
 #else
     self.panning = panning;
 #endif
-    self.keyboardDidMoveBlock = actionHandler;
+    self.frameBasedKeyboardDidMoveBlock = frameBasedActionHandler;
+    self.constraintBasedKeyboardDidMoveBlock = constraintBasedActionHandler;
     
     // Register for text input notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -145,6 +146,11 @@ static BOOL _useAutolayoutAnimationLogic = NO;
     }
 }
 
+- (BOOL)keyboardIsOpened
+{
+    return self.keyboardActiveView != 0;
+}
+
 - (void)removeKeyboardControl
 {
     // Unregister for text input notifications
@@ -182,7 +188,7 @@ static BOOL _useAutolayoutAnimationLogic = NO;
     [self removeGestureRecognizer:self.keyboardPanRecognizer];
     
     // Release a few properties
-    self.keyboardDidMoveBlock = nil;
+    self.frameBasedKeyboardDidMoveBlock = nil;
     self.keyboardActiveInput = nil;
     self.keyboardActiveView = nil;
     self.keyboardPanRecognizer = nil;
@@ -236,24 +242,18 @@ static BOOL _useAutolayoutAnimationLogic = NO;
     
     CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:nil];
     
-    if (_useAutolayoutAnimationLogic)
-    {
-        if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
-            self.keyboardDidMoveBlock(keyboardEndFrameView);
-    }
+    BOOL constraintBasedKeyboardDidMoveBlockCalled = self.constraintBasedKeyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView);
+    if (constraintBasedKeyboardDidMoveBlockCalled)
+        self.constraintBasedKeyboardDidMoveBlock(keyboardEndFrameView, YES, NO);
+
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
                         options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         if (_useAutolayoutAnimationLogic)
-                         {
+                         if (constraintBasedKeyboardDidMoveBlockCalled)
                              [self layoutIfNeeded];
-                         }
-                         else
-                         {
-                             if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
-                                 self.keyboardDidMoveBlock(keyboardEndFrameView);
-                         }
+                         if (self.frameBasedKeyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
+                             self.frameBasedKeyboardDidMoveBlock(keyboardEndFrameView, YES, NO);
                      }
                      completion:^(__unused BOOL finished){
                          if (self.panning && !self.keyboardPanRecognizer)
@@ -296,24 +296,19 @@ static BOOL _useAutolayoutAnimationLogic = NO;
     
     CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:nil];
     
-    if (_useAutolayoutAnimationLogic)
-    {
-        if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
-            self.keyboardDidMoveBlock(keyboardEndFrameView);
-    }
+    BOOL constraintBasedKeyboardDidMoveBlockCalled = self.constraintBasedKeyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView);
+    if (constraintBasedKeyboardDidMoveBlockCalled)
+        self.constraintBasedKeyboardDidMoveBlock(keyboardEndFrameView, NO, NO);
+
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
                         options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         if (_useAutolayoutAnimationLogic)
-                         {
+                         if (constraintBasedKeyboardDidMoveBlockCalled)
                              [self layoutIfNeeded];
-                         }
-                         else
-                         {
-                             if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
-                                 self.keyboardDidMoveBlock(keyboardEndFrameView);
-                         }
+
+                         if (self.frameBasedKeyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
+                             self.frameBasedKeyboardDidMoveBlock(keyboardEndFrameView, NO, NO);
                      }
                      completion:nil];
 }
@@ -335,25 +330,20 @@ static BOOL _useAutolayoutAnimationLogic = NO;
     [[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&keyboardTransitionAnimationCurve];
     
     CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:nil];
-    
-    if (_useAutolayoutAnimationLogic)
-    {
-        if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
-            self.keyboardDidMoveBlock(keyboardEndFrameView);
-    }
+
+    BOOL constraintBasedKeyboardDidMoveBlockCalled = self.constraintBasedKeyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView);
+    if (constraintBasedKeyboardDidMoveBlockCalled)
+        self.constraintBasedKeyboardDidMoveBlock(keyboardEndFrameView, NO, YES);
+
     [UIView animateWithDuration:keyboardTransitionDuration
                           delay:0.0f
                         options:AnimationOptionsForCurve(keyboardTransitionAnimationCurve) | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         if (_useAutolayoutAnimationLogic)
-                         {
+                         if (constraintBasedKeyboardDidMoveBlockCalled)
                              [self layoutIfNeeded];
-                         }
-                         else
-                         {
-                             if (self.keyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
-                                 self.keyboardDidMoveBlock(keyboardEndFrameView);
-                         }
+
+                         if (self.frameBasedKeyboardDidMoveBlock && !CGRectIsNull(keyboardEndFrameView))
+                             self.frameBasedKeyboardDidMoveBlock(keyboardEndFrameView, NO, YES);
                      }
                      completion:^(__unused BOOL finished){
                          // Remove gesture recognizer when keyboard is not showing
@@ -381,11 +371,15 @@ static BOOL _useAutolayoutAnimationLogic = NO;
 
         if (CGRectEqualToRect(keyboardEndFrameView, self.previousKeyboardRect)) return;
 
-        if (self.keyboardDidMoveBlock && !self.keyboardActiveView.hidden&& !CGRectIsNull(keyboardEndFrameView))
+        if (!self.keyboardActiveView.hidden && !CGRectIsNull(keyboardEndFrameView))
         {
-            self.keyboardDidMoveBlock(keyboardEndFrameView);
-            if (_useAutolayoutAnimationLogic)
+            if (self.frameBasedKeyboardDidMoveBlock)
+                self.frameBasedKeyboardDidMoveBlock(keyboardEndFrameView, NO, NO);
+            if (self.constraintBasedKeyboardDidMoveBlock)
+            {
+                self.constraintBasedKeyboardDidMoveBlock(keyboardEndFrameView, NO, NO);
                 [self layoutIfNeeded];
+            }
         }
 
         self.previousKeyboardRect = keyboardEndFrameView;
@@ -473,8 +467,8 @@ static BOOL _useAutolayoutAnimationLogic = NO;
                                      /* Unnecessary now, due to KVO on self.keyboardActiveView
                                      CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame
                                                                                   fromView:self.keyboardActiveView.window];
-                                     if (self.keyboardDidMoveBlock)
-                                         self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
+                                     if (self.frameBasedKeyboardDidMoveBlock)
+                                         self.frameBasedKeyboardDidMoveBlock(newKeyboardViewFrameInView);
                                      */
                                  }
                                  completion:nil];
@@ -506,8 +500,8 @@ static BOOL _useAutolayoutAnimationLogic = NO;
                                  /* Unnecessary now, due to KVO on self.keyboardActiveView
                                  CGRect newKeyboardViewFrameInView = [self convertRect:newKeyboardViewFrame
                                                                               fromView:self.keyboardActiveView.window];
-                                 if (self.keyboardDidMoveBlock)
-                                     self.keyboardDidMoveBlock(newKeyboardViewFrameInView);
+                                 if (self.frameBasedKeyboardDidMoveBlock)
+                                     self.frameBasedKeyboardDidMoveBlock(newKeyboardViewFrameInView);
                                  */
                              }
                              completion:^(__unused BOOL finished){
@@ -596,20 +590,36 @@ static BOOL _useAutolayoutAnimationLogic = NO;
     [self didChangeValueForKey:@"previousKeyboardRect"];
 }
 
-- (DAKeyboardDidMoveBlock)keyboardDidMoveBlock
+- (DAKeyboardDidMoveBlock)frameBasedKeyboardDidMoveBlock
 {
     return objc_getAssociatedObject(self,
-                                    &UIViewKeyboardDidMoveBlock);
+                                    &UIViewKeyboardDidMoveFrameBasedBlock);
 }
 
-- (void)setKeyboardDidMoveBlock:(DAKeyboardDidMoveBlock)keyboardDidMoveBlock
+- (void)setFrameBasedKeyboardDidMoveBlock:(DAKeyboardDidMoveBlock)frameBasedKeyboardDidMoveBlock
 {
-    [self willChangeValueForKey:@"keyboardDidMoveBlock"];
+    [self willChangeValueForKey:@"frameBasedKeyboardDidMoveBlock"];
     objc_setAssociatedObject(self,
-                             &UIViewKeyboardDidMoveBlock,
-                             keyboardDidMoveBlock,
+                             &UIViewKeyboardDidMoveFrameBasedBlock,
+                             frameBasedKeyboardDidMoveBlock,
                              OBJC_ASSOCIATION_COPY);
-    [self didChangeValueForKey:@"keyboardDidMoveBlock"];
+    [self didChangeValueForKey:@"frameBasedKeyboardDidMoveBlock"];
+}
+
+- (DAKeyboardDidMoveBlock)constraintBasedKeyboardDidMoveBlock
+{
+    return objc_getAssociatedObject(self,
+                                    &UIViewKeyboardDidMoveConstraintBasedBlock);
+}
+
+- (void)setConstraintBasedKeyboardDidMoveBlock:(DAKeyboardDidMoveBlock)constraintBasedKeyboardDidMoveBlock
+{
+    [self willChangeValueForKey:@"constraintBasedKeyboardDidMoveBlock"];
+    objc_setAssociatedObject(self,
+                             &UIViewKeyboardDidMoveConstraintBasedBlock,
+                             constraintBasedKeyboardDidMoveBlock,
+                             OBJC_ASSOCIATION_COPY);
+    [self didChangeValueForKey:@"constraintBasedKeyboardDidMoveBlock"];
 }
 
 - (CGFloat)keyboardTriggerOffset
