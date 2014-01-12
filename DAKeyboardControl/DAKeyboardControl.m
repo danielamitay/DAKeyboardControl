@@ -23,6 +23,7 @@ static char UIViewKeyboardActiveView;
 static char UIViewKeyboardPanRecognizer;
 static char UIViewPreviousKeyboardRect;
 static char UIViewIsPanning;
+static char UIViewKeyboardOpened;
 
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
@@ -33,6 +34,7 @@ static char UIViewIsPanning;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
 @property (nonatomic) CGRect previousKeyboardRect;
 @property (nonatomic, getter = isPanning) BOOL panning;
+@property (nonatomic, getter = isKeyboardOpened) BOOL keyboardOpened;
 @end
 
 @implementation UIView (DAKeyboardControl)
@@ -146,11 +148,6 @@ static char UIViewIsPanning;
     }
 }
 
-- (BOOL)keyboardIsOpened
-{
-    return self.keyboardActiveView != 0;
-}
-
 - (void)removeKeyboardControl
 {
     // Unregister for text input notifications
@@ -239,6 +236,7 @@ static char UIViewIsPanning;
     [[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&keyboardTransitionAnimationCurve];
     
     self.keyboardActiveView.hidden = NO;
+    self.keyboardOpened = YES;
     
     CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:nil];
     
@@ -357,6 +355,7 @@ static char UIViewIsPanning;
     self.keyboardActiveView.hidden = NO;
     self.keyboardActiveView.userInteractionEnabled = YES;
     self.keyboardActiveView = nil;
+    self.keyboardOpened = NO;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -711,6 +710,22 @@ static char UIViewIsPanning;
                              keyboardPanRecognizer,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [self didChangeValueForKey:@"keyboardPanRecognizer"];
+}
+
+- (BOOL)isKeyboardOpened
+{
+    return [objc_getAssociatedObject(self,
+                                     &UIViewKeyboardOpened) boolValue];
+}
+
+- (void)setKeyboardOpened:(BOOL)keyboardOpened
+{
+    [self willChangeValueForKey:@"keyboardOpened"];
+    objc_setAssociatedObject(self,
+                             &UIViewKeyboardOpened,
+                             @(keyboardOpened),
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"keyboardOpened"];
 }
 
 - (BOOL)keyboardWillRecede
