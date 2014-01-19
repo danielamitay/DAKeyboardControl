@@ -29,8 +29,8 @@ static char UIViewKeyboardOpened;
 
 @property (nonatomic) DAKeyboardDidMoveBlock frameBasedKeyboardDidMoveBlock;
 @property (nonatomic) DAKeyboardDidMoveBlock constraintBasedKeyboardDidMoveBlock;
-@property (nonatomic, assign) UIResponder *keyboardActiveInput;
-@property (nonatomic, assign) UIView *keyboardActiveView;
+@property (nonatomic, strong) UIResponder *keyboardActiveInput;
+@property (nonatomic, strong) UIView *keyboardActiveView;
 @property (nonatomic, strong) UIPanGestureRecognizer *keyboardPanRecognizer;
 @property (nonatomic) CGRect previousKeyboardRect;
 @property (nonatomic, getter = isPanning) BOOL panning;
@@ -355,6 +355,7 @@ static char UIViewKeyboardOpened;
     self.keyboardActiveView.hidden = NO;
     self.keyboardActiveView.userInteractionEnabled = YES;
     self.keyboardActiveView = nil;
+    self.keyboardActiveInput = nil;
     self.keyboardOpened = NO;
 }
 
@@ -667,7 +668,7 @@ static char UIViewKeyboardOpened;
     objc_setAssociatedObject(self,
                              &UIViewKeyboardActiveInput,
                              keyboardActiveInput,
-                             OBJC_ASSOCIATION_ASSIGN);
+                             OBJC_ASSOCIATION_RETAIN);
     [self didChangeValueForKey:@"keyboardActiveInput"];
 }
 
@@ -692,7 +693,7 @@ static char UIViewKeyboardOpened;
     objc_setAssociatedObject(self,
                              &UIViewKeyboardActiveView,
                              keyboardActiveView,
-                             OBJC_ASSOCIATION_ASSIGN);
+                             OBJC_ASSOCIATION_RETAIN);
     [self didChangeValueForKey:@"keyboardActiveView"];
 }
 
