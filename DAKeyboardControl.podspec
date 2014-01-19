@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'DAKeyboardControl'
-  s.version  = '2.2.0'
+  s.version  = '2.3.0'
   s.platform = :ios
   s.license  = 'MIT'
   s.summary  = 'Easily add keyboard awareness and scrolling dismissal.'
