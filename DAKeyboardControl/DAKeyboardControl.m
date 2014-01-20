@@ -277,7 +277,9 @@ static char UIViewKeyboardOpened;
     if (!self.keyboardActiveView)
     {
         // Find the first responder on subviews and look re-assign first responder to it
-        [self reAssignFirstResponder];
+        self.keyboardActiveInput = [self recursiveFindFirstResponder:self];
+        self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+        self.keyboardActiveView.hidden = NO;
     }
 }
 
@@ -417,8 +419,9 @@ static char UIViewKeyboardOpened;
 {
     if(!self.keyboardActiveView || !self.keyboardActiveInput || self.keyboardActiveView.hidden)
     {
-        [self reAssignFirstResponder];
-        return;
+        self.keyboardActiveInput = [self recursiveFindFirstResponder:self];
+        self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+        self.keyboardActiveView.hidden = NO;
     }
     else
     {
@@ -522,18 +525,6 @@ static char UIViewKeyboardOpened;
 }
 
 #pragma mark - Internal Methods
-
-- (void)reAssignFirstResponder
-{
-    // Find first responder
-    UIView *inputView = [self recursiveFindFirstResponder:self];
-    if (inputView != nil)
-    {
-        // Re assign the focus
-        [inputView resignFirstResponder];
-        [inputView becomeFirstResponder];
-    }
-}
 
 - (UIView *)recursiveFindFirstResponder:(UIView *)view
 {
