@@ -76,6 +76,12 @@ static char UIViewKeyboardOpened;
     [self addKeyboardControl:NO frameBasedActionHandler:actionHandler constraintBasedActionHandler:0];
 }
 
+- (void)addKeyboardNonpanningWithFrameBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveFrameBasesBlock
+                            constraintBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveConstraintBasesBlock
+{
+    [self addKeyboardControl:NO frameBasedActionHandler:didMoveFrameBasesBlock constraintBasedActionHandler:didMoveConstraintBasesBlock];
+}
+
 - (void)addKeyboardControl:(BOOL)panning frameBasedActionHandler:(DAKeyboardDidMoveBlock)frameBasedActionHandler constraintBasedActionHandler:(DAKeyboardDidMoveBlock)constraintBasedActionHandler
 {
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0)

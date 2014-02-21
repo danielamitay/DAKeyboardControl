@@ -41,6 +41,8 @@ typedef void (^DAKeyboardDidMoveBlock)(CGRect keyboardFrameInView, BOOL opening,
  @see removeKeyboardControl
  */
 - (void)addKeyboardNonpanningWithActionHandler:(DAKeyboardDidMoveBlock)didMoveBlock;
+- (void)addKeyboardNonpanningWithFrameBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveFrameBasesBlock
+                            constraintBasedActionHandler:(DAKeyboardDidMoveBlock)didMoveConstraintBasesBlock;
 
 /** Remove the keyboard action handler
  @note You MUST call this method to remove the keyboard handler before the view
