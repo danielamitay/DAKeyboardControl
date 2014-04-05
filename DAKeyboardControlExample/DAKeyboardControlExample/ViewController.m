@@ -21,7 +21,6 @@
     
     self.title = @"DAKeyboardControl";
     self.view.backgroundColor = [UIColor lightGrayColor];
-    
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f,
                                                                            0.0f,
                                                                            self.view.bounds.size.width,
@@ -56,6 +55,10 @@
     
     self.view.keyboardTriggerOffset = toolBar.bounds.size.height;
     
+    UITextView *t = [[UITextView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.view.bounds), 40)];
+    t.text = @"This is a TextView";
+    [self.view addSubview:t];
+    
     [self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView) {
         /* 
          Try not to call "self" inside this block (retain cycle).
@@ -63,7 +66,6 @@
          when you are done with the view controller by calling:
          [self.view removeKeyboardControl];
          */
-        
         CGRect toolBarFrame = toolBar.frame;
         toolBarFrame.origin.y = keyboardFrameInView.origin.y - toolBarFrame.size.height;
         toolBar.frame = toolBarFrame;

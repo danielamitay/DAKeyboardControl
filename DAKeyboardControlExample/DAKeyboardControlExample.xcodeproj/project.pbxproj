@@ -140,6 +140,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Shout Messenger";
+				TargetAttributes = {
+					6366DFC215B3E76100FE53DE = {
+						DevelopmentTeam = WY99WDVBE3;
+					};
+				};
 			};
 			buildConfigurationList = 6366DFBD15B3E76000FE53DE /* Build configuration list for PBXProject "DAKeyboardControlExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -254,11 +259,14 @@
 		6366DFE515B3E76100FE53DE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DAKeyboardControlExample/DAKeyboardControlExample-Prefix.pch";
 				INFOPLIST_FILE = "DAKeyboardControlExample/DAKeyboardControlExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -266,11 +274,14 @@
 		6366DFE615B3E76100FE53DE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DAKeyboardControlExample/DAKeyboardControlExample-Prefix.pch";
 				INFOPLIST_FILE = "DAKeyboardControlExample/DAKeyboardControlExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
