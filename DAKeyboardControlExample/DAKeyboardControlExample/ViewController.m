@@ -56,8 +56,8 @@
     
     self.view.keyboardTriggerOffset = toolBar.bounds.size.height;
     
-    [self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView) {
-        /* 
+    [self.view addKeyboardPanningWithFrameBasedActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
+        /*
          Try not to call "self" inside this block (retain cycle).
          But if you do, make sure to remove DAKeyboardControl
          when you are done with the view controller by calling:
@@ -71,7 +71,7 @@
         CGRect tableViewFrame = tableView.frame;
         tableViewFrame.size.height = toolBarFrame.origin.y;
         tableView.frame = tableViewFrame;
-    }];
+    } constraintBasedActionHandler:nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
