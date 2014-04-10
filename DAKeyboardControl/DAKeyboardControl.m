@@ -194,6 +194,16 @@ static char UIViewIsPanning;
 - (void)inputKeyboardWillShow:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGRect keyboardBeginFrameWindow = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    if (CGRectEqualToRect(keyboardBeginFrameWindow, keyboardEndFrameWindow)) {
+        self.keyboardActiveView.hidden = NO;
+        if (self.panning && !self.keyboardPanRecognizer) {
+            [self setupGestureRecognizer];
+        }
+        return;
+    }
+
     double keyboardTransitionDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationCurve keyboardTransitionAnimationCurve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
@@ -220,6 +230,7 @@ static char UIViewIsPanning;
 {
     // Grab the keyboard view
     self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+    self.keyboardActiveView.clipsToBounds = YES;
     self.keyboardActiveView.hidden = NO;
     
     // If the active keyboard view could not be found (UITextViews...), try again
@@ -232,6 +243,12 @@ static char UIViewIsPanning;
 - (void)inputKeyboardWillChangeFrame:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGRect keyboardBeginFrameWindow = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    if (CGRectEqualToRect(keyboardBeginFrameWindow, keyboardEndFrameWindow)) {
+        return;
+    }
+
     double keyboardTransitionDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationCurve keyboardTransitionAnimationCurve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
@@ -256,6 +273,15 @@ static char UIViewIsPanning;
 - (void)inputKeyboardWillHide:(NSNotification *)notification
 {
     CGRect keyboardEndFrameWindow = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGRect keyboardBeginFrameWindow = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    if (CGRectEqualToRect(keyboardBeginFrameWindow, keyboardEndFrameWindow)) {
+        // Remove gesture recognizer when keyboard is not showing
+        [self removeGestureRecognizer:self.keyboardPanRecognizer];
+        self.keyboardPanRecognizer = nil;
+        return;
+    }
+
     double keyboardTransitionDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationCurve keyboardTransitionAnimationCurve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     
@@ -426,7 +452,7 @@ static char UIViewIsPanning;
     UIView *inputView = [self findFirstResponder];
     if (inputView != nil) {
         // Re assign the focus
-        [inputView resignFirstResponder];
+//        [inputView resignFirstResponder];
         [inputView becomeFirstResponder];
     }
 }
