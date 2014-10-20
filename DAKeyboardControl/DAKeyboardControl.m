@@ -9,6 +9,9 @@
 #import "DAKeyboardControl.h"
 #import <objc/runtime.h>
 
+#ifndef SYSTEM_VERSION_LESS_THAN
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#endif
 
 static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCurve curve)
 {
@@ -24,6 +27,8 @@ static char UIViewKeyboardPanRecognizer;
 static char UIViewPreviousKeyboardRect;
 static char UIViewIsPanning;
 static char UIViewKeyboardOpened;
+
+static NSString *UIViewKeyboardObservingKey;
 
 @interface UIView (DAKeyboardControl_Internal) <UIGestureRecognizerDelegate>
 
@@ -57,6 +62,8 @@ static char UIViewKeyboardOpened;
 					class_getMethodImplementation(self, swizzledSelector),
 					method_getTypeEncoding(swizzledMethod));
     method_exchangeImplementations(originalMethod, swizzledMethod);
+    
+    UIViewKeyboardObservingKey = SYSTEM_VERSION_LESS_THAN(@"8") ? @"frame" : @"center";
 }
 
 #pragma mark - Public Methods
@@ -372,9 +379,9 @@ static char UIViewKeyboardOpened;
                         change:(__unused NSDictionary *)change
                        context:(__unused void *)context
 {
-    if([keyPath isEqualToString:@"frame"] && object == self.keyboardActiveView)
+    if([keyPath isEqualToString:UIViewKeyboardObservingKey] && object == self.keyboardActiveView)
     {
-        CGRect keyboardEndFrameWindow = [[object valueForKeyPath:keyPath] CGRectValue];
+        CGRect keyboardEndFrameWindow = self.keyboardActiveView.frame;
         CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.window];
         
         if (CGRectEqualToRect(keyboardEndFrameView, self.previousKeyboardRect)) return;
@@ -688,11 +695,11 @@ static char UIViewKeyboardOpened;
 {
     [self willChangeValueForKey:@"keyboardActiveView"];
     [self.keyboardActiveView removeObserver:self
-                                 forKeyPath:@"frame"];
+                                 forKeyPath:UIViewKeyboardObservingKey];
     if (keyboardActiveView)
     {
         [keyboardActiveView addObserver:self
-                             forKeyPath:@"frame"
+                             forKeyPath:UIViewKeyboardObservingKey
                                 options:0
                                 context:NULL];
     }
