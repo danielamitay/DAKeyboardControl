@@ -141,7 +141,7 @@ static char UIViewKeyboardOpened;
     if (self.keyboardActiveView)
     {
         CGRect keyboardFrameInView = [self convertRect:self.keyboardActiveView.frame
-                                              fromView:self.keyboardActiveView.window];
+                                              fromView:self.keyboardActiveView.superview];
         return keyboardFrameInView;
     }
     else
@@ -375,7 +375,7 @@ static char UIViewKeyboardOpened;
     if([keyPath isEqualToString:@"frame"] && object == self.keyboardActiveView)
     {
         CGRect keyboardEndFrameWindow = [[object valueForKeyPath:keyPath] CGRectValue];
-        CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.window];
+        CGRect keyboardEndFrameView = [self convertRect:keyboardEndFrameWindow fromView:self.keyboardActiveView.superview];
         
         if (CGRectEqualToRect(keyboardEndFrameView, self.previousKeyboardRect)) return;
         
@@ -435,8 +435,8 @@ static char UIViewKeyboardOpened;
     }
     
     CGFloat keyboardViewHeight = self.keyboardActiveView.bounds.size.height;
-    CGFloat keyboardWindowHeight = self.keyboardActiveView.window.bounds.size.height;
-    CGPoint touchLocationInKeyboardWindow = [gesture locationInView:self.keyboardActiveView.window];
+    CGFloat keyboardWindowHeight = self.keyboardActiveView.superview.bounds.size.height;
+    CGPoint touchLocationInKeyboardWindow = [gesture locationInView:self.keyboardActiveView.superview];
     
     // If touch is inside trigger offset, then disable keyboard input
     if (touchLocationInKeyboardWindow.y > keyboardWindowHeight - keyboardViewHeight - self.keyboardTriggerOffset)
@@ -738,8 +738,8 @@ static char UIViewKeyboardOpened;
 - (BOOL)keyboardWillRecede
 {
     CGFloat keyboardViewHeight = self.keyboardActiveView.bounds.size.height;
-    CGFloat keyboardWindowHeight = self.keyboardActiveView.window.bounds.size.height;
-    CGPoint touchLocationInKeyboardWindow = [self.keyboardPanRecognizer locationInView:self.keyboardActiveView.window];
+    CGFloat keyboardWindowHeight = self.keyboardActiveView.superview.bounds.size.height;
+    CGPoint touchLocationInKeyboardWindow = [self.keyboardPanRecognizer locationInView:self.keyboardActiveView.superview];
     
     CGFloat thresholdHeight = keyboardWindowHeight - keyboardViewHeight - self.keyboardTriggerOffset + 44.0f;
     CGPoint velocity = [self.keyboardPanRecognizer velocityInView:self.keyboardActiveView];
