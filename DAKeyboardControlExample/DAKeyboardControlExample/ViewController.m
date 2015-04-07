@@ -26,6 +26,9 @@
                                                                            0.0f,
                                                                            self.view.bounds.size.width,
                                                                            self.view.bounds.size.height - 40.0f)];
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    
     tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:tableView];
     
@@ -80,6 +83,34 @@
         return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
     else
         return YES;
+}
+
+#pragma UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 10;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellIdentifier"];
+    
+    if(cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"Cell section %d, row : %d", indexPath.row, indexPath.row];
+    
+    return cell;
 }
 
 @end
