@@ -573,6 +573,7 @@ static char UIViewKeyboardOpened;
                 textView.inputAccessoryView = nullView;
             }
         }
+        return;
     }
     [self swizzled_addSubview:subview];
 }
