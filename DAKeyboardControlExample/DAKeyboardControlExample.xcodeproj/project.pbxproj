@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040A71E31B21AD26004A4B97 /* Launchscreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 040A71E21B21AD26004A4B97 /* Launchscreen.xib */; };
 		6366DFC815B3E76100FE53DE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6366DFC715B3E76100FE53DE /* UIKit.framework */; };
 		6366DFCA15B3E76100FE53DE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6366DFC915B3E76100FE53DE /* Foundation.framework */; };
 		6366DFCC15B3E76100FE53DE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6366DFCB15B3E76100FE53DE /* CoreGraphics.framework */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		040A71E21B21AD26004A4B97 /* Launchscreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Launchscreen.xib; sourceTree = SOURCE_ROOT; };
 		6366DFC315B3E76100FE53DE /* DAKeyboardControlExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DAKeyboardControlExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6366DFC715B3E76100FE53DE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6366DFC915B3E76100FE53DE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -98,6 +100,7 @@
 				6366DFD015B3E76100FE53DE /* InfoPlist.strings */,
 				6366DFD315B3E76100FE53DE /* main.m */,
 				6366DFD515B3E76100FE53DE /* DAKeyboardControlExample-Prefix.pch */,
+				040A71E21B21AD26004A4B97 /* Launchscreen.xib */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 			files = (
 				6366DFD215B3E76100FE53DE /* InfoPlist.strings in Resources */,
 				63ECD0631628CC5A004D8D10 /* Default-568h@2x.png in Resources */,
+				040A71E31B21AD26004A4B97 /* Launchscreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
