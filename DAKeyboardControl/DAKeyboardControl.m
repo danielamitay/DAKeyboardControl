@@ -111,10 +111,6 @@ static char UIViewKeyboardOpened;
                                              selector:@selector(inputKeyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(inputKeyboardDidShow)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
     
     // For the sake of 4.X compatibility
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -224,7 +220,7 @@ static char UIViewKeyboardOpened;
         }
         self.keyboardActiveInput = (UIResponder *)textField;
         // Force the keyboard active view reset
-        [self inputKeyboardDidShow];
+        [self grabActiveKeyboardView];
     }
 }
 
@@ -240,6 +236,8 @@ static char UIViewKeyboardOpened;
     
     UIViewAnimationCurve keyboardTransitionAnimationCurve;
     [[notification.userInfo valueForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&keyboardTransitionAnimationCurve];
+
+    [self grabActiveKeyboardView];
     
     self.keyboardActiveView.hidden = NO;
     self.keyboardOpened = YES;
@@ -273,7 +271,7 @@ static char UIViewKeyboardOpened;
                      }];
 }
 
-- (void)inputKeyboardDidShow
+- (void)grabActiveKeyboardView
 {
     // Grab the keyboard view
     self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;

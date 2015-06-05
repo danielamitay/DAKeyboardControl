@@ -6,7 +6,7 @@
 
 No hacks, fully App Store safe.
 
-![Screenshot](https://github.com/danielamitay/DAKeyboardControl/raw/master/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/SabatinoMasala/DAKeyboardControl/master/screenshot.png)
 
 [Video demonstration on YouTube](http://www.youtube.com/watch?v=J6GLro0cyDU)
 
