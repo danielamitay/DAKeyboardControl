@@ -12,7 +12,7 @@
 
 static inline UIViewAnimationOptions AnimationOptionsForCurve(UIViewAnimationCurve curve)
 {
-	return curve << 16;
+    return curve << 16;
 }
 
 static char UIViewKeyboardTriggerOffset;
@@ -49,13 +49,13 @@ static char UIViewKeyboardOpened;
     Method originalMethod = class_getInstanceMethod(self, originalSelector);
     Method swizzledMethod = class_getInstanceMethod(self, swizzledSelector);
     class_addMethod(self,
-					originalSelector,
-					class_getMethodImplementation(self, originalSelector),
-					method_getTypeEncoding(originalMethod));
-	class_addMethod(self,
-					swizzledSelector,
-					class_getMethodImplementation(self, swizzledSelector),
-					method_getTypeEncoding(swizzledMethod));
+                    originalSelector,
+                    class_getMethodImplementation(self, originalSelector),
+                    method_getTypeEncoding(originalMethod));
+    class_addMethod(self,
+                    swizzledSelector,
+                    class_getMethodImplementation(self, swizzledSelector),
+                    method_getTypeEncoding(swizzledMethod));
     method_exchangeImplementations(originalMethod, swizzledMethod);
 }
 
@@ -276,7 +276,7 @@ static char UIViewKeyboardOpened;
 - (void)inputKeyboardDidShow
 {
     // Grab the keyboard view
-    self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+    self.keyboardActiveView = [self findInputSetHostView];
     self.keyboardActiveView.hidden = NO;
     
     // If the active keyboard view could not be found (UITextViews...), try again
@@ -284,7 +284,7 @@ static char UIViewKeyboardOpened;
     {
         // Find the first responder on subviews and look re-assign first responder to it
         self.keyboardActiveInput = [self recursiveFindFirstResponder:self];
-        self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+        self.keyboardActiveView = [self findInputSetHostView];
         self.keyboardActiveView.hidden = NO;
     }
 }
@@ -426,7 +426,7 @@ static char UIViewKeyboardOpened;
     if(!self.keyboardActiveView || !self.keyboardActiveInput || self.keyboardActiveView.hidden)
     {
         self.keyboardActiveInput = [self recursiveFindFirstResponder:self];
-        self.keyboardActiveView = self.keyboardActiveInput.inputAccessoryView.superview;
+        self.keyboardActiveView = [self findInputSetHostView];
         self.keyboardActiveView.hidden = NO;
     }
     else
@@ -548,6 +548,20 @@ static char UIViewKeyboardOpened;
         }
     }
     return found;
+}
+
+-(UIView*) findInputSetHostView {
+    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0) {
+        for(UIWindow* window in [[UIApplication sharedApplication] windows])
+            if([window isKindOfClass:NSClassFromString(@"UIRemoteKeyboardWindow")])
+                for(UIView* subView in window.subviews)
+                    if([subView isKindOfClass:NSClassFromString(@"UIInputSetHostView")])
+                        for(UIView* subsubView in subView.subviews)
+                            if([subsubView isKindOfClass:NSClassFromString(@"UIInputSetHostView")])
+                                return subsubView;
+    } else
+        return self.keyboardActiveInput.inputAccessoryView.superview;
+    return nil;
 }
 
 - (void)swizzled_addSubview:(UIView *)subview
