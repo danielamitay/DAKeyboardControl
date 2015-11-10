@@ -42,6 +42,7 @@ static char UIViewKeyboardOpened;
 
 + (void)load
 {
+#if !TARGET_INTERFACE_BUILDER
     // Swizzle the 'addSubview:' method to ensure that all input fields
     // have a valid inputAccessoryView upon addition to the view heirarchy
     SEL originalSelector = @selector(addSubview:);
@@ -57,6 +58,7 @@ static char UIViewKeyboardOpened;
 					class_getMethodImplementation(self, swizzledSelector),
 					method_getTypeEncoding(swizzledMethod));
     method_exchangeImplementations(originalMethod, swizzledMethod);
+#endif
 }
 
 #pragma mark - Public Methods
